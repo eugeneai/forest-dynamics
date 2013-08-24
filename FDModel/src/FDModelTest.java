@@ -10,8 +10,12 @@ public class FDModelTest {
         System.out.println("Test of the FDModel suite");
         FDModel M;
         M = new FDModel();
-        System.out.print("FDModel.nodel.val=");
-        System.out.println(M.node.val);
+        FDNode root = M.node;
+        root.val=1.0;
+        root.addArc(0.1);
+        root.addArc(0.9);
+        M.euler(0.1);
+        System.out.printf("FDModel.node.val=%f\n", M.node.val);
         System.out.println("Ok");
     }
 }
