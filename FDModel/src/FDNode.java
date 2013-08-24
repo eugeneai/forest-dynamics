@@ -8,32 +8,29 @@
 public class FDNode {
     public double val;
     public double newVal;
-    public double oldVal;
-    public FDArc other;
-    public FDNode next;
+    public FDArc siblings;
 
-    public FDNode(double aVal, FDArc anOther, FDNode aNext) {
+    public FDNode(double aVal, FDArc siblings) {
         this.val=aVal;
-        this.other=anOther;
-        this.next=aNext;
+        this.siblings=siblings;
         this.clean();
     }
     public FDNode(double aVal) {
-        this(aVal, null, null);
+        this(aVal, null);
     }
     public FDNode() {
         this(0.0);
     }
     public void clean() {
         this.newVal=0.0;
-        this.oldVal=0.0;
     }
     public FDNode addArc(FDNode aNode, double val) {
-        if (this.next != null) {
-            return this.next.addArc(aNode, val);
+        if (this.siblings != null) {
+            this.siblings.addArc(val, aNode);
+            return aNode;
         } else {
-            this.next=new FDNode(val, new FDArc(val, aNode), null);
-            return this.next;
+            this.siblings=new FDArc(val, aNode, null);
+            return aNode;
         }
     }
     public FDNode addArc(double val) {

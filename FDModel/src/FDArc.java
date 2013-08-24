@@ -8,11 +8,22 @@
 public class FDArc {
     public double val;
     public FDNode target;
-    public FDArc (double aVal, FDNode aTarget) {
+    public FDArc next;
+    public FDArc (double aVal, FDNode aTarget, FDArc aNext) {
         this.target = aTarget;
         this.val = aVal;
+        this.next = aNext;
     }
     public FDArc (double aVal) {
-        this(aVal, new FDNode());
+        this(aVal, new FDNode(), null);
+    }
+
+    public FDNode addArc(double val, FDNode target) {
+        if (this.next != null) {
+            return this.next.addArc(val, target);
+        } else {
+            this.next = new FDArc(val, target, null);
+            return target;
+        }
     }
 }

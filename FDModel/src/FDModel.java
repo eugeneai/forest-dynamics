@@ -13,8 +13,18 @@ public class FDModel {
     public FDModel () {
         this.node=new FDNode(0.0);
     }
-    public double euler(double dt) {
-        // Integrate graph in two steps
-        return 0.0;
+    // Integrate graph in three steps
+    public void clearNewVals(FDNode node) {
+        FDNode currNode, nextNode;
+        FDArc currArc;
+        if (node == null) return;
+        // The first step. Erasing newVals of all the graph nodes.
+        currNode = node;
+        currArc = currNode.siblings;
+        currNode.newVal = 0.0;
+        while (currArc != null) {
+            this.clearNewVals(currArc.target);
+            currArc = currArc.next;
+        }
     }
 }
