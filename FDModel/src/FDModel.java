@@ -7,6 +7,12 @@
  */
 public class FDModel {
     public FDNode node;
+    public FDModel (FDNode aNode) {
+        this.node=aNode;
+    }
+    public FDModel () {
+        this.node=new FDNode(0.0);
+    }
     public double euler(double dt) {
         // Integrate graph in two steps
     }

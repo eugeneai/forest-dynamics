@@ -9,8 +9,8 @@ public class FDNode {
     public double val;
     public double newVal;
     public double oldVal;
+    public FDArc other;
     public FDNode next;
-    public FDNode other;
 
     FDNode(double aVal) {
         this.val=aVal;
