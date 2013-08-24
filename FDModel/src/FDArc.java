@@ -8,4 +8,11 @@
 public class FDArc {
     public double val;
     public FDNode target;
+    public FDArc (double aVal, FDNode aTarget) {
+        this.target = aTarget;
+        this.val = aVal;
+    }
+    public FDArc (double aVal) {
+        this(aVal, new FDNode());
+    }
 }

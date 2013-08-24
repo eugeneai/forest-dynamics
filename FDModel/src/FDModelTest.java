@@ -8,7 +8,8 @@
 public class FDModelTest {
     public static void main (String [] args) {
         System.out.println("Test of the FDModel suite");
-        FDModel M = new FDModel();
+        FDModel M;
+        M = new FDModel();
         System.out.print("FDModel.nodel.val=");
         System.out.println(M.node.val);
         System.out.println("Ok");
