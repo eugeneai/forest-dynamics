@@ -15,5 +15,6 @@ public class FDModel {
     }
     public double euler(double dt) {
         // Integrate graph in two steps
+        return 0.0;
     }
 }
