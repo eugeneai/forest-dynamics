@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.ArrayList;
+
 /**
  * Created with IntelliJ IDEA.
  * User: eugeneai
@@ -6,12 +9,26 @@
  * To change this template use File | Settings | File Templates.
  */
 public class FDModel {
+    protected static class FDSymbol {
+        FDNode node;
+        ArrayList<float> list;
+        public FDSymbol(FDNode node, int maxSize) {
+            this.node = node;
+            list = new ArrayList<float>(maxSize);
+        }
+    }
     public FDNode node;
+    public HashMap<String, FDSymbol> symbolTable;
+    // public int maxModellingPeriod;
+    protected int yearsToModel;
+
     public FDModel (FDNode aNode) {
         this.node=aNode;
+        this.symbolTable = new HashMap<String, FDSymbol>(100);
+        this.yearsToModel = 0;
     }
     public FDModel () {
-        this.node=new FDNode(0.0);
+        this(new FDNode(0.0));
     }
 
     public static interface Action {
@@ -77,4 +94,14 @@ public class FDModel {
     public void step(IntegrationTechnique t, double dt) {
         t.step(this.node, dt);
     }
+
+    public FDNode define(FDNode node, String name) {
+        this.symbolTable.put(name, new FDSymbol(node, this.yearsToModel));
+        return node;
+    }
+    public FDNode getNode(String name) {
+        return ((FDSymbol)this.symbolTable.get(name)).node;
+    }
+    public
+
 }
