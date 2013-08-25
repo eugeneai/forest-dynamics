@@ -7,6 +7,20 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" scope="PROVIDED">
+      <library>
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/swt" />
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/tests" />
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/source" />
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/experimental" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="jfreechart-1.0.15" level="application" />
+    <orderEntry type="library" name="jcommon-1.0.18" level="application" />
   </component>
 </module>
 

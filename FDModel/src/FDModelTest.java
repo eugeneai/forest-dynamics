@@ -10,12 +10,15 @@ public class FDModelTest {
         System.out.println("Test of the FDModel suite");
         FDModel M;
         M = new FDModel();
-        FDNode root = M.node;
+        FDNode root = M.node, n1, n2;
         root.val=1.0;
-        root.addArc(0.1);
-        root.addArc(0.9);
-        M.step(new EulerIntegrationTechnique(), 1);
-        System.out.printf("FDModel.node.val=%f\n", M.node.val);
+        n1 = root.addArc(0.1);
+        n2 = root.addArc(0.9);
+        n2.addArc(root, 1.0);
+        for (int i=1; i<=100; i++) {
+            M.step(new EulerIntegrationTechnique(), 0.1);
+            System.out.printf("%02d: FDModel.node.val=%f\n", i, M.node.val);
+        };
         System.out.println("Ok");
     }
 }
