@@ -14,7 +14,7 @@ public class FDModelTest {
         root.val=1.0;
         root.addArc(0.1);
         root.addArc(0.9);
-        M.euler(0.1);
+        M.step(new EulerIntegrationTechnique(), 1);
         System.out.printf("FDModel.node.val=%f\n", M.node.val);
         System.out.println("Ok");
     }
