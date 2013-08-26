@@ -46,7 +46,7 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
         XYSeriesCollection dataset = createDataset(model);
         JFreeChart chart = createChart(dataset);
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(360, 500));
+        chartPanel.setPreferredSize(new java.awt.Dimension(900, 700));
         setContentPane(chartPanel);
 
     }
@@ -60,15 +60,10 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
 
         XYSeriesCollection result = new XYSeriesCollection();
 
-        XYSeries s3 = new XYSeries("P3", true, false);
-        XYSeries s5 = new XYSeries("P5", true, false);
-        for (int i=1; i<=100; i++) {
-            s3.add(i, i);
-            s5.add(i, i*i);
+        for (String k: model.symbolTable.keySet()) {
+            XYSeries s = model.getSeries(k);
+            result.addSeries(s);
         }
-
-        result.addSeries(s3);
-        result.addSeries(s5);
         return result;
 
     }
@@ -82,15 +77,16 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
      */
     private static JFreeChart createChart(XYDataset dataset) {
         JFreeChart chart = ChartFactory.createXYLineChart(
-                null,
-                "Age in Months",
-                "kg",
+                "Forest Dynamics Simulated Time Series",
+                "Year",
+                "Area / rate",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
                 true,
                 false
         );
+        /*
         TextTitle t1 = new TextTitle("Growth Charts: United States",
                 new Font("SansSerif", Font.BOLD, 14));
         TextTitle t2 = new TextTitle(
@@ -98,6 +94,7 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
                 new Font("SansSerif", Font.PLAIN, 11));
         chart.addSubtitle(t1);
         chart.addSubtitle(t2);
+        */
         XYPlot plot = chart.getXYPlot();
         NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
         domainAxis.setUpperMargin(0.12);
@@ -105,6 +102,7 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setAutoRangeIncludesZero(false);
 
+        /*
         // add some annotations...
         XYTextAnnotation annotation = null;
         Font font = new Font("SansSerif", Font.PLAIN, 9);
@@ -118,7 +116,7 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
         annotation.setFont(font);
         annotation.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);
         plot.addAnnotation(annotation);
-
+        */
 
         return chart;
     }
@@ -130,7 +128,8 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        SimpleFDSimulationPresenter application = new SimpleFDSimulationPresenter("Forest Dynamics Time Series", null);
+        FDModel model = FDModelTest.test_one();
+        SimpleFDSimulationPresenter application = new SimpleFDSimulationPresenter("Forest Dynamics Time Series", model);
         application.pack();
         RefineryUtilities.centerFrameOnScreen(application);
         application.setVisible(true);
