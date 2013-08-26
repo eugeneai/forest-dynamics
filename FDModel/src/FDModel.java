@@ -11,10 +11,10 @@ import java.util.ArrayList;
 public class FDModel {
     protected static class FDSymbol {
         FDNode node;
-        ArrayList<float> list;
+        ArrayList<Double> list;
         public FDSymbol(FDNode node, int maxSize) {
             this.node = node;
-            list = new ArrayList<float>(maxSize);
+            list = new ArrayList<Double>(maxSize);
         }
     }
     public FDNode node;
@@ -100,8 +100,16 @@ public class FDModel {
         return node;
     }
     public FDNode getNode(String name) {
-        return ((FDSymbol)this.symbolTable.get(name)).node;
+        return ((FDSymbol) this.symbolTable.get(name)).node;
     }
-    public
-
+    public ArrayList<Double> getData(String name) {
+        return ((FDSymbol) this.symbolTable.get(name)).list;
+    }
+    public double storeAs(double val, String name) {
+        this.symbolTable.get(name).list.add(val);
+        return val;
+    }
+    public double get(String name, int index) {
+        return this.symbolTable.get(name).list.get(index);
+    }
 }
