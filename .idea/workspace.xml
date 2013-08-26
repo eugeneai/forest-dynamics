@@ -2,20 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bfe4bc83-cc9f-474c-9801-d973f86b2781" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FDModel/FDModel.iml" afterPath="$PROJECT_DIR$/FDModel/FDModel.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" afterPath="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="untitled.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377481811412" ignored="false" />
+    <file path="/Dummy.txt" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377483486889" ignored="false" />
     <file path="/Hello.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377258522710" ignored="false" />
     <file path="/FDNode.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377391877295" ignored="false" />
     <file path="/FDModel.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377479195811" ignored="false" />
     <file path="/FDArc.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377310374411" ignored="false" />
     <file path="/FDModelTest.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377398735273" ignored="false" />
     <file path="/EulerIntegrationTechnique.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377398958469" ignored="false" />
-    <file path="/SimpleFDSimulationPresenter.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377482950800" ignored="false" />
+    <file path="/SimpleFDSimulationPresenter.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377485468983" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,8 +119,9 @@
       <file leaf-file-name="SimpleFDSimulationPresenter.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="30" selection-start="3880" selection-end="3880" vertical-scroll-proportion="0.57298774">
+            <state line="121" column="0" selection-start="3653" selection-end="3653" vertical-scroll-proportion="4.12987">
               <folding>
+                <element signature="e#0#4354#0" expanded="true" />
                 <element signature="imports" expanded="true" />
               </folding>
             </state>
@@ -455,7 +455,11 @@
       <created>1377444756067</created>
       <updated>1377444756067</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Renamed time series title and axes.">
+      <created>1377483506715</created>
+      <updated>1377483506715</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -468,15 +472,15 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.7508772" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26666668" sideWeight="0.4644013" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.117313914" sideWeight="0.3017544" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.116883114" sideWeight="0.9028436" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32819906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26540285" sideWeight="0.5347896" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26467204" sideWeight="0.5347896" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.67134506" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928804" sideWeight="0.7508772" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21185064" sideWeight="0.73459715" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0971564" sideWeight="0.56634307" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3095512" sideWeight="0.56634307" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32982457" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -526,7 +530,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started implementing acquisition system." />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed time series title and axes." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -551,6 +555,7 @@
     <MESSAGE value="Created a simulation environment." />
     <MESSAGE value="Allow one to calculate several times inside Euler integration.&#10;" />
     <MESSAGE value="Started implementing acquisition system." />
+    <MESSAGE value="Renamed time series title and axes." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -655,8 +660,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="30" selection-start="3880" selection-end="3880" vertical-scroll-proportion="0.57298774">
+        <state line="121" column="0" selection-start="3653" selection-end="3653" vertical-scroll-proportion="4.12987">
           <folding>
+            <element signature="e#0#4354#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
         </state>
