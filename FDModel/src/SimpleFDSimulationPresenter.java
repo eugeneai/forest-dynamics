@@ -40,10 +40,10 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
      *
      * @param title  the frame title.
      */
-    public SimpleFDSimulationPresenter(String title) {
+    public SimpleFDSimulationPresenter(String title, FDModel model) {
 
         super(title);
-        XYSeriesCollection dataset = createDataset();
+        XYSeriesCollection dataset = createDataset(model);
         JFreeChart chart = createChart(dataset);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(360, 500));
@@ -56,7 +56,7 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
      *
      * @return a dataset.
      */
-    private static XYSeriesCollection createDataset() {
+    private static XYSeriesCollection createDataset(FDModel model) {
 
         XYSeriesCollection result = new XYSeriesCollection();
 
@@ -124,26 +124,16 @@ public class SimpleFDSimulationPresenter extends ApplicationFrame {
     }
 
     /**
-     * Creates a panel for the demo (used by SuperDemo.java).
-     *
-     * @return A panel.
-     */
-    public static JPanel createDemoPanel() {
-        JFreeChart chart = createChart(createDataset());
-        return new ChartPanel(chart);
-    }
-
-    /**
      * Starting point for the demonstration application when it is run as
      * a stand-alone application.
      *
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        SimpleFDSimulationPresenter demo = new SimpleFDSimulationPresenter("Annotation Demo 1");
-        demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
-        demo.setVisible(true);
+        SimpleFDSimulationPresenter application = new SimpleFDSimulationPresenter("Forest Dynamics Time Series", null);
+        application.pack();
+        RefineryUtilities.centerFrameOnScreen(application);
+        application.setVisible(true);
     }
 
 }

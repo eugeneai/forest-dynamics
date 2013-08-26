@@ -29,9 +29,10 @@ public class EulerIntegrationTechnique extends FDModel.BaseIntegrationTechnique
         this.steps=steps;
     }
     public void integrationStep(FDNode node, double dt) {
+        double ddt = dt/this.steps;
         EulerAction ea = new EulerAction();
         for (int i=0; i<this.steps; i++) {
-            this.nodeExecute(node, ea, dt);
+            this.nodeExecute(node, ea, ddt);
         }
     }
 }

@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+import org.jfree.data.xy.XYSeries;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,20 +12,22 @@ import java.util.ArrayList;
 public class FDModel {
     protected static class FDSymbol {
         FDNode node;
-        ArrayList<Double> list;
-        public FDSymbol(FDNode node, int maxSize) {
+        XYSeries list;
+        public FDSymbol(FDNode node, int maxSize, String name) {
             this.node = node;
-            list = new ArrayList<Double>(maxSize);
+            list = new XYSeries(name, false);
         }
     }
     public FDNode node;
     public HashMap<String, FDSymbol> symbolTable;
+    public HashMap<FDNode, String> nodeTable;
     // public int maxModellingPeriod;
     protected int yearsToModel;
 
     public FDModel (FDNode aNode) {
         this.node=aNode;
         this.symbolTable = new HashMap<String, FDSymbol>(100);
+        this.nodeTable = new HashMap<FDNode, String>(100);
         this.yearsToModel = 0;
     }
     public FDModel () {
@@ -96,20 +99,42 @@ public class FDModel {
     }
 
     public FDNode define(FDNode node, String name) {
-        this.symbolTable.put(name, new FDSymbol(node, this.yearsToModel));
+        this.symbolTable.put(name, new FDSymbol(node, this.yearsToModel, name));
+        this.nodeTable.put(node, name);
         return node;
     }
     public FDNode getNode(String name) {
         return ((FDSymbol) this.symbolTable.get(name)).node;
     }
-    public ArrayList<Double> getData(String name) {
+    public XYSeries getSeries(String name) {
         return ((FDSymbol) this.symbolTable.get(name)).list;
     }
+    public XYSeries getSeries(FDNode node) {
+        return this.getSeries((String) this.nodeTable.get(node));
+    }
     public double storeAs(double val, String name) {
-        this.symbolTable.get(name).list.add(val);
+        XYSeries s = this.symbolTable.get(name).list;
+        s.add(s.getItemCount() + 1, val);
         return val;
     }
     public double get(String name, int index) {
-        return this.symbolTable.get(name).list.get(index);
+        return this.symbolTable.get(name).list.getY(index).doubleValue();
+    }
+
+    public int simulate(IntegrationTechnique t, int yearsToModel) {
+        this.yearsToModel=yearsToModel;
+        double dt = 1.0;
+        this.storeSeries();
+        for (int year = 1; year <= yearsToModel; year ++) {
+            this.step(t, dt);
+            this.storeSeries();
+        }
+        return yearsToModel;
+    }
+
+    protected void storeSeries() {
+        for (FDSymbol s: this.symbolTable.values()) {
+            this.storeAs(s.node.val, (String) s.list.getKey());
+        }
     }
 }
