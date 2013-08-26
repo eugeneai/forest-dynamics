@@ -7,20 +7,26 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="PROVIDED">
+    <orderEntry type="module-library">
       <library>
-        <CLASSES />
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart/jfreechart-1.0.15.jar!/" />
+        </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/swt" />
-          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/tests" />
-          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/source" />
-          <root url="jar://$MODULE_DIR$/../libs/jfreechart-1.0.15/jfreechart-1.0.15-bundle.jar!/experimental" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="jfreechart-1.0.15" level="application" />
-    <orderEntry type="library" name="jcommon-1.0.18" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/jfreechart/jcommon-1.0.18.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="com" level="project" />
+    <orderEntry type="library" name="org" level="project" />
   </component>
 </module>
 
