@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bfe4bc83-cc9f-474c-9801-d973f86b2781" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FDModel/FDModel.iml" afterPath="$PROJECT_DIR$/FDModel/FDModel.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" afterPath="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="untitled.iws" />
@@ -14,7 +15,7 @@
     <file path="/FDArc.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377310374411" ignored="false" />
     <file path="/FDModelTest.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377398735273" ignored="false" />
     <file path="/EulerIntegrationTechnique.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377398958469" ignored="false" />
-    <file path="/SimpleFDSimulationPresenter.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377435914102" ignored="false" />
+    <file path="/SimpleFDSimulationPresenter.java" changelist="bfe4bc83-cc9f-474c-9801-d973f86b2781" time="1377482950800" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,8 +120,10 @@
       <file leaf-file-name="SimpleFDSimulationPresenter.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="19" selection-start="2270" selection-end="2270" vertical-scroll-proportion="0.56276447">
-              <folding />
+            <state line="107" column="30" selection-start="3880" selection-end="3880" vertical-scroll-proportion="0.57298774">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -160,8 +163,8 @@
         <option value="$PROJECT_DIR$/FDModel/src/FDModelTest.java" />
         <option value="$PROJECT_DIR$/FDModel/src/EulerIntegrationTechnique.java" />
         <option value="$PROJECT_DIR$/FDModel/src/TimeSeriesChartDemo1.java" />
-        <option value="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" />
         <option value="$PROJECT_DIR$/FDModel/src/FDModel.java" />
+        <option value="$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java" />
       </list>
     </option>
   </component>
@@ -457,22 +460,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="0" width="1288" height="1002" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.322807" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3222749" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928804" sideWeight="0.7508772" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.7508772" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26666668" sideWeight="0.4644013" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.117313914" sideWeight="0.3017544" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32865497" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32819906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26540285" sideWeight="0.5347896" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.67134506" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928804" sideWeight="0.7508772" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21185064" sideWeight="0.9028436" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21185064" sideWeight="0.73459715" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0971564" sideWeight="0.56634307" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -557,13 +560,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/FDModel/src/FDArc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="26" selection-start="712" selection-end="712" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/FDModel/src/FDModel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="0" selection-start="749" selection-end="749" vertical-scroll-proportion="0.0">
@@ -650,10 +646,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/libs/jfreechart-1.0.15/tests/org/jfree/chart/block/junit/BlockPackageTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="28" selection-start="1817" selection-end="1817" vertical-scroll-proportion="0.14814815">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/FDModel/src/SimpleFDSimulationPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="19" selection-start="2270" selection-end="2270" vertical-scroll-proportion="0.56276447">
-          <folding />
+        <state line="107" column="30" selection-start="3880" selection-end="3880" vertical-scroll-proportion="0.57298774">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
