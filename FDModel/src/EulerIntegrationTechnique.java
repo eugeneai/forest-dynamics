@@ -7,7 +7,6 @@
  */
 public class EulerIntegrationTechnique extends FDModel.BaseIntegrationTechnique
         implements FDModel.IntegrationTechnique{
-    public int steps;
     public static class EulerAction implements FDModel.Action {
         public void execute(FDNode node, double dt) {
             double dv=0.0, d;
@@ -22,17 +21,8 @@ public class EulerIntegrationTechnique extends FDModel.BaseIntegrationTechnique
             node.dVal -= dv;
         }
     }
-    public EulerIntegrationTechnique() {
-        this(1);
-    }
-    public EulerIntegrationTechnique(int steps) {
-        this.steps=steps;
-    }
     public void integrationStep(FDNode node, double dt) {
-        double ddt = dt/this.steps;
         EulerAction ea = new EulerAction();
-        for (int i=0; i<this.steps; i++) {
-            this.nodeExecute(node, ea, ddt);
-        }
+        this.nodeExecute(node, ea, dt);
     }
 }

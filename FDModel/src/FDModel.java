@@ -121,12 +121,14 @@ public class FDModel {
         return this.symbolTable.get(name).list.getY(index).doubleValue();
     }
 
-    public int simulate(IntegrationTechnique t, int yearsToModel) {
+    public int simulate(IntegrationTechnique t, int yearsToModel, int steps) {
         this.yearsToModel=yearsToModel;
-        double dt = 1.0;
+        double dt = 1.0/steps;
         this.storeSeries();
         for (int year = 1; year <= yearsToModel; year ++) {
-            this.step(t, dt);
+            for (int step = 0; step<steps; step++) {
+                this.step(t, dt);
+            };
             this.storeSeries();
         }
         return yearsToModel;
