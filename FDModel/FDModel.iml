@@ -27,6 +27,15 @@
     </orderEntry>
     <orderEntry type="library" name="com" level="project" />
     <orderEntry type="library" name="org" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../libs/rhino/js-14.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
