@@ -2,6 +2,7 @@
   <library name="org">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/libs/jfreechart/jfreechart-1.0.15.jar!/org" />
+      <root url="jar://$PROJECT_DIR$/libs/rhino/js-14.jar!/org" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
