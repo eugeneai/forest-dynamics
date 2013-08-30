@@ -1,7 +1,7 @@
 package org.icc.fd;
 
-import org.mozilla.javascript.*;
 import sun.org.mozilla.javascript.Context;
+import sun.org.mozilla.javascript.Scriptable;
 
 /**
  * Created with IntelliJ IDEA.
