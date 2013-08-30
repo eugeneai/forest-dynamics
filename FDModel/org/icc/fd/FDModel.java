@@ -1,3 +1,5 @@
+package org.icc.fd;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import org.jfree.data.xy.XYSeries;
