@@ -9,11 +9,11 @@ import sun.org.mozilla.javascript.ScriptableObject;
  * Time: 10:21
  * To change this template use File | Settings | File Templates.
  */
-public class JSMyCounter extends ScriptableObject {
-    private static final long serialVersionUID = 438270592527335642L;
+public class JSCounter extends ScriptableObject {
+    private static final long serialVersionUID = 438270524527335642L;
 
     // The zero-argument constructor used by Rhino runtime to create instances
-    public JSMyCounter() {
+    public JSCounter() {
     }
 
     // Method jsConstructor defines the JavaScript constructor

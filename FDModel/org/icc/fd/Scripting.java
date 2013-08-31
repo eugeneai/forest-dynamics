@@ -4,8 +4,6 @@ import sun.org.mozilla.javascript.Context;
 import sun.org.mozilla.javascript.Scriptable;
 import sun.org.mozilla.javascript.ScriptableObject;
 
-import org.icc.fd.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: eugeneai
@@ -22,19 +20,19 @@ public class Scripting {
         this.scope = this.context.initStandardObjects();
         //this.scope.put("a42", null, 42);
         try {
-            ScriptableObject.defineClass(scope, JSMyCounter.class);
+            ScriptableObject.defineClass(scope, JSCounter.class);
         }
         catch (Throwable e) {
             System.err.println("JS init exception: "+e);
         }
-        // Create one instance of Counter/JSMyCounter
+        // Create one instance of Counter/JSCounter
         Object[] arg = { new Integer(7) };
         Scriptable myCounter = this.context.newObject(scope, "Counter", arg);
         scope.put("myCounter", scope, myCounter);
 
         //ScriptableObject.defineClass(scope, FDArc);
         //ScriptableObject.defineClass(scope, FDNode);
-        //TODO load our context objects as, e.g., a global variale FD, or fd;
+        //TODO load our context objects as, e.g., a global variable FD, or fd;
     }
 
     @Override
