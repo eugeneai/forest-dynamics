@@ -16,9 +16,9 @@ public class FDModelTest {
         n1 = root.addArc(0.1);
         n2 = root.addArc(0.2);
         n2.addArc(root, 1.0);
-        M.define(n1, "N_1");
-        M.define(n2, "N_2");
-        M.define(M.node, "R");
+        //M.define(n1, "N_1");
+        //M.define(n2, "N_2");
+        //M.define(M.node, "R");
         int s = M.simulate(new EulerIntegrationTechnique(),55, 100);
         System.out.printf("Steps done: %d\n", s);
         System.out.println("Ok");

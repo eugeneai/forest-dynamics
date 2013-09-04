@@ -9,7 +9,7 @@ package org.icc.fd;
  */
 public class EulerIntegrationTechnique extends FDModel.BaseIntegrationTechnique
         implements FDModel.IntegrationTechnique{
-    public static class EulerAction implements FDModel.Action {
+    public static class EulerAction implements FDModel.DTAction {
         public void execute(FDNode node, double dt) {
             double dv=0.0, d;
             FDArc arc;
