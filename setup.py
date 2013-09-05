@@ -10,9 +10,9 @@ setup(
 	author_email="eugeneai@icc.ru",
 	description="Dynamic Modelling Environment",
 	packages=['dme'],
-	package_dir={'dme':'lib'},
+	package_dir={'dme':'src'},
 	ext_modules=[Extension( "dme.DModel",
-		sources=["src/DModel.c"],
+		sources=["src/C/DModel.c"],
 		)
 	]
 )
