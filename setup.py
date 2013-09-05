@@ -1,7 +1,7 @@
-from distutils.core import setup, Extension
+from ez_setup import use_setuptools
+use_setuptools()
 
-
-
+from setuptools import setup, Extension
 
 setup(
 	name="DME",
