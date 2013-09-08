@@ -1,0 +1,22 @@
+<!--@+leo-ver=5-thin-->
+<!--@+node:eugeneai.20110116171118.1330: * @file configure.zcml-->
+<!--@@language xml-->
+<configure xmlns="http://namespaces.zope.org/zope">
+
+<include package="zope.component" file="meta.zcml" />
+
+<!-- Initialize core components of Data Mining system -->
+<include package="icc.xray" />
+
+<!-- Initialize components of XRAY explore application -->
+
+<!--
+
+<include package="icc.dme.models" />
+<include package="icc.dme.views" />
+
+-->
+
+</configure>
+
+<!--@-leo-->
