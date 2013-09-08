@@ -22,8 +22,8 @@ setup(
         "icc.xray"
     ],
 
-	ext_modules=[Extension( "icc.dme.DModel",
-		sources=["src/icc/dme/C/DModel.c"],
+	ext_modules=[Extension( "icc.dme.fd.DModel",
+		sources=["src/icc/dme/fd/C/DModel.c"],
 		)
 	],
 
