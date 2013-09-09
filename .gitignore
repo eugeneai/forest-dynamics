@@ -34,5 +34,5 @@ nosetests.xml
 .project
 .pydevproject
 /PKG-INFO
-/python*
+python*/
 /tmp
