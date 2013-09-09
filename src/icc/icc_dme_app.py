@@ -3,7 +3,7 @@ import sys
 import icc.rake.app as app
 
 def main():
-    app.main('icc.xray')
+    app.main('icc.dme')
 
 if __name__=="__main__":
     main()

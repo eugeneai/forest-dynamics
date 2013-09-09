@@ -3,6 +3,7 @@
 PYTHON_VERSION=2
 PYTHON=python$PYTHON_VERSION
 VIRT_PREF="(dme)"
+ICC_DME_BRANCH="exp"
 
 # DEBUG="1"
 DEBUG="" 
@@ -56,7 +57,7 @@ cd tmp
 
 pip install numpy
 
-$PYTHON -c "import gi"
+$PYTHON -c "import cairo"
 rc=$?
 
 if [ $rc -ne 0 ]; then
@@ -92,7 +93,7 @@ cd ..
 $PYTHON -c "import icc.xray"
 rc=$?
 if [ $rc -ne 0 ]; then
-    pip install https://api.github.com/repos/eugeneai/dispersive/tarball/
+    pip install https://github.com/eugeneai/dispersive/archive/$ICC_DME_BRANCH.zip
 fi
 
 $PYTHON setup.py develop
