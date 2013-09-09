@@ -3,7 +3,11 @@
 PYTHON_VERSION=2
 PYTHON=python$PYTHON_VERSION
 VIRT_PREF="(dme)"
+
 ICC_DME_BRANCH="exp"
+PYGOBJECT_V="3.8.3"
+CAIRO_V="1.10.0"
+
 
 # DEBUG="1"
 DEBUG="" 
@@ -50,9 +54,6 @@ tmp=tmp-install
 
 mkdir -p $tmp
 
-PYGOBJECT_V="3.8.3"
-CAIRO_V=1.20.0
-
 cd tmp
 
 pip install numpy
@@ -97,3 +98,5 @@ if [ $rc -ne 0 ]; then
 fi
 
 $PYTHON setup.py develop
+
+rm -rf tmp-install
