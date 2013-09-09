@@ -1,18 +1,42 @@
 from ez_setup import use_setuptools
 use_setuptools()
+from setuptools import setup, find_packages, Extension
+from distutils import log
 
-from setuptools import setup, Extension
+log.set_verbosity(100)
 
 setup(
-	name="DME",
-	version="0.0.3",
+    zip_safe = True,
+	name="icc.dme",
+	version="0.0.4",
 	author="Evgeny Cherkashin",
-	author_email="eugeneai@icc.ru",
+	author_email="eugeneai@irnok.net",
 	description="Dynamic Modelling Environment",
-	packages=['dme'],
-	package_dir={'dme':'src'},
-	ext_modules=[Extension( "dme.DModel",
-		sources=["src/C/DModel.c"],
+
+    packages=find_packages("src"),
+    package_dir={"": "src"},
+    namespace_packages=["icc"],
+
+    install_requires=[
+        "setuptools",
+        "icc.xray"
+    ],
+
+	ext_modules=[Extension( "icc.dme.fd.DModel",
+		sources=["src/icc/dme/fd/C/DModel.c"],
 		)
-	]
+	],
+
+    scripts = ['src/icc/icc_dme_app.py'],
+    package_data = {
+        'icc.dme.views': ['ui/*.glade',] #  "ui/icons/tango/16x16/*/*.png"],
+        },
+    license = "GNU GPL",
+    keywords = "fores resources pygtk analysis tool application",
+
+    long_description = """ """,
+
+    # platform = "Os Independent.",
+    # could also include long_description, download_url, classifiers, etc.
+
 )
