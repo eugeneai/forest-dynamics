@@ -54,7 +54,7 @@ tmp=tmp-install
 
 mkdir -p $tmp
 
-cd tmp
+cd $tmp
 
 pip install numpy
 
