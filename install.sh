@@ -4,7 +4,9 @@ PYTHON_VERSION=2
 PYTHON=python$PYTHON_VERSION
 VIRT_PREF="(dme)"
 
-DEBUG="1"
+# DEBUG="1"
+DEBUG="" 
+
 if [ "x$DEBUG" == "x" ] ; then
     if [ "x$1" == "x" ] ; then
         echo "The program ins installed into a directory."
