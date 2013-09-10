@@ -6,16 +6,14 @@
 <include package="zope.component" file="meta.zcml" />
 
 <!-- Initialize core components of Data Mining system -->
-<include package="icc.xray" />
+
+<include package="icc.rake.views" file="base.zcml" />
 
 <!-- Initialize components of XRAY explore application -->
-
-<!--
 
 <include package="icc.dme.models" />
 <include package="icc.dme.views" />
 
--->
 
 </configure>
 

@@ -1,0 +1,9 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+<utility
+    component=".components.Project"
+    provides="zope.component.interfaces.IFactory"
+    name="main_model"
+    />
+
+</configure>
