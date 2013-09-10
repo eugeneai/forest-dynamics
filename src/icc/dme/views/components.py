@@ -7,6 +7,11 @@ import icc.rake.interfaces
 from interfaces import *
 import zope.component
 
+from matplotlib.figure import Figure
+import matplotlib
+from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
+
+
 def gsm():
     return zope.component.getGlobalSiteManager()
 
@@ -19,24 +24,24 @@ class View(icc.rake.views.components.View):
     """
     resource=__name__
 
-    #def __init__(self, ):
-    #    """
-    #    """
+    def __init__(self, model=None, parent=None):
+        icc.rake.views.components.View.__init__(
+            self, model=model, parent=parent)
 
 class DMEPlotView(View):
     """
     """
 
-    def __init__(self, parent=None, model=None):
+    def __init__(self, model=None, parent=None):
         """
         """
         View.__init__(self, model=model, parent=parent)
         self.parent_ui=pui=gsm().getUtility(
-            icc.rake.interfaces.IApplication
+            icc.rake.views.interfaces.IApplication
         )
 
-        frame=Gtk.Frame()
-        vbox=Gtk.Vbox()
+        self.ui.main_frame=frame=Gtk.Frame()
+        vbox=Gtk.VBox()
         frame.add(vbox)
 
         fig = Figure(figsize=(5,4), dpi=120,
