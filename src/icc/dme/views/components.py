@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 import matplotlib
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
 
+import pyxser
 
 def gsm():
     return zope.component.getGlobalSiteManager()
@@ -63,6 +64,20 @@ class DMEPlotView(View):
         self.invalidate_model(model)
 
     def on_project_open(self, widget, filename):
-        return ConfirmationDialog("Open file", filename)
+        if 1:
+        #try:
+            i=open(filename)
+        #except IO:
+        model=pyxser.unserialize(i.read(), enc='utf=8', cinit=True)
+        self.set_model(model)
+        i.close()
+        return True
 
-    on_project_save=on_project_open
+    def on_project_save(self, widget, filename):
+        assert (self.model != None), "the model should be not None"
+        o=open(filename, "w")
+        w=pyxser.serialize(self.model, enc='utf-8', depth='3')
+        print "SAVE:",w
+        o.write(w)
+        o.close()
+        return True

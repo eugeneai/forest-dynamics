@@ -3,4 +3,5 @@ from interfaces import *
 
 class Project(object):
     implements(IProject)
-    pass
+    def __init__(self):
+        self.test_attr="test"
