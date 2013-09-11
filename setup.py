@@ -19,7 +19,8 @@ setup(
 
     install_requires=[
         "setuptools",
-        "icc.xray"
+        "icc.xray",
+        "pyxser"
     ],
 
 	ext_modules=[Extension( "icc.dme.fd.DModel",

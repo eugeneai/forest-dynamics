@@ -88,6 +88,15 @@ if [ $rc -ne 0 ]; then
     rm -rf pygobject-$PYGOBJECT_V
 fi
 
+$PYTHON -c "import pyxser"
+rc=$?
+if [ $rc -ne 0 ]; then
+
+    echo "Installing pyxser."
+
+    pip install https://github.com/eugeneai/pyxser/archive/master.zip
+fi
+
 cd ..
 
 
