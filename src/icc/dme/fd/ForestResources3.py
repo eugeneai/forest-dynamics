@@ -421,19 +421,6 @@ class ForestModel:
         xl=self.excel=xlrd.open_workbook(filename, formatting_info=True)
         self.filename=filename
 
-        """
-        sheet = self.excel.sheet_by_index(0)
-
-        for rownum in range(sheet.nrows):
-            row = sheet.row_values(rownum)
-            print row
-            #for c_el in row:
-            #    print c_el,
-            #print
-
-        return
-        """
-
         s_page=xl.sheet_by_name("S%s" % year_id)
         g_page=xl.sheet_by_name("grow%s" % year_id)
 
@@ -464,91 +451,104 @@ class ForestModel:
                 pass
 
         del g_struct, s_struct
-        print self.kinds
+        del s_page, g_page
 
-        return
-        cursor.execute('select * from "free%s$"' % str(year_id))
-        struct=cursor.description
-        data=cursor.fetchone()
+        f_page = xl.sheet_by_name("free%s" % year_id)
+        struct = f_page.row_values(0)
+        data = f_page.row_values(1)
         self.Sn=data[0]	# hack
         self.S0=data[1]	# hack
         self.n20=data[2]	# hack
-        cursor.execute('select year,dSk from "cultures$"')
-        data=cursor.fetchone()
+        del f_page, data, struct
+
+        c_page= xl.sheet_by_name("cultures")
+        #cursor.execute('select year,dSk from "cultures$"')
+
+
         F101=self.kinds[101]
         Lk1=F101.Lk1
         S=0
         year_last=int(year_id)
         phase=1
         self.USk={}
-        while data:
+
+        for rn in range(c_page.nrows):
+            if rn==0: continue
+            data = c_page.row_values(rn)
+
             y=int(data[0])
             dS=data[1]
-            dS=dS/1000.0 # to make thousents of ga (kga)
+            dS=dS/1000.0 # to make thousants of ga (kga)
             if y>year_last:
                 phase=3
-                if phase==1:
-                    y_p=y
-                    phase=2
-                    S=dS
-                elif phase==2:
-                    y_t=y
-                    dy=y_t-y_p
-                    S = S - S * (Lk1**dy) + dS	#dSk
-                    y_p=y_t
-                else:
-                    pass
-                    self.USk[y]=dS
-                    #print data[0], S, data[1]
-                    data=cursor.fetchone()
-                    print "Summary of Sk (kga):", S
-                    try:
-                        self.options["NO_CULTURES"]
-                        self.Sk0=0.0
-                        self.USk[year_last]=0.0
-                        print "Warning: No cultures!"
-                    except KeyError:
-                        self.Sk0=S
-                        del S,F101
+            if phase==1:
+                y_p=y
+                phase=2
+                S=dS
+            elif phase==2:
+                y_t=y
+                dy=y_t-y_p
+                S = S - S * (Lk1**dy) + dS	#dSk
+                y_p=y_t
 
-		cursor.execute('select * from "interchange%s$"' % str(year_id))
-        data=cursor.fetchone()
-        struct=cursor.description
-        while data:
+            self.USk[y]=dS
+            #print data[0], S, data[1]
+
+        print "Summary of Sk (kga):", S
+
+        try:
+            self.options["NO_CULTURES"]
+            self.Sk0=0.0
+            self.USk[year_last]=0.0
+            print "Warning: No cultures!"
+        except KeyError:
+            self.Sk0=S
+            del S,F101
+
+        del data, c_page
+
+        i_page = xl.sheet_by_name("interchange%s" % year_id)
+
+        for rn in range(i_page.nrows):
+            data=i_page.row_values(rn)
+            if rn==0:
+                struct=data
+                continue
             try:
                 kind=int(data[0])
                 F=self.kinds[kind]
                 F.AcceptInterchangeConstants(data,struct)
             except KeyError:
                 pass
-                data=cursor.fetchone()
+        del i_page, data
 
-		cursor.execute('select * from "logging$"')
-        data=cursor.fetchone()
+        l_page = xl.sheet_by_name('logging')
         self.ULogging={}
-        while data:
+        for rn in range(l_page.nrows):
+            data=l_page.row_values(rn)
+            if rn==0: continue
             self.ULogging[int(data[0])]=data[1] / 1000.0	# conversion to kga
-            data=cursor.fetchone()
+        del l_page, data
 
-		# Cultural activity of habitants
-            cursor.execute('select * from "people%s$"' % str(year_id))
-            data=cursor.fetchone()
-            self.Sall=data[0]	# Al squaresl of the region (thousands of ga)
-            self.Ssx=data[1]	# Agricultural squares (thousands of ga)
-            self.N=data[2]		# No of habitants (thousants)
-            self.L=data[3]		# Length of roads (km)
-            self.KdN=data[4]	# Trend of habitants grow, i.e., N_{i+1} = KdN*N_{i}
-            self.KNn=data[5]	# Activity of habitants to get therritory rom forest
-            self.KdNsx=data[6] # How mush kgas to take by 1 thousants of habitants
+        # Cultural activity of habitants
+        data=xl.sheet_by_name("people%s" % year_id).row_values(1)
+        self.Sall=data[0]	# Al squaresl of the region (thousands of ga)
+        self.Ssx=data[1]	# Agricultural squares (thousands of ga)
+        self.N=data[2]		# No of habitants (thousants)
+        self.L=data[3]		# Length of roads (km)
+        self.KdN=data[4]	# Trend of habitants grow, i.e., N_{i+1} = KdN*N_{i}
+        self.KNn=data[5]	# Activity of habitants to get therritory rom forest
+        self.KdNsx=data[6] # How mush kgas to take by 1 thousants of habitants
+        del data
 
 		# fires
-            cursor.execute('select * from "fires%s$"' % str(year_id))
-            data=cursor.fetchone()
-            self.KULogging=data[0]	# How much to fire when logging (0.88)
-            self.KfN=data[1]			# Fires due to habitants
-            self.KfL=data[2]			# Fires due to transport
-            self.KfSsx=data[3]		# Fires due to Agricultural interprises
-            self.dUf=data[4]			# Fires due to DRY storm
+        data=xl.sheet_by_name("fires%s" % year_id).row_values(1)
+        self.KULogging=data[0]	# How much to fire when logging (0.88)
+        self.KfN=data[1]			# Fires due to habitants
+        self.KfL=data[2]			# Fires due to transport
+        self.KfSsx=data[3]		# Fires due to Agricultural interprises
+        self.dUf=data[4]			# Fires due to DRY storm
+        del data
 
 
 	def BuildModel(self, species=None):
