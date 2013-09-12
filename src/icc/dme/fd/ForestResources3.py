@@ -1,9 +1,10 @@
-from dme import *
-import ODBC.Windows as ODBC
-from Numeric import *
+#!/bin/env python2
+# encoding: utf-8
+from dm import *
+from numpy import *
 import types
 import math
-
+import xlrd
 
 TableKind={
 	101:"СОСНА",
@@ -35,7 +36,7 @@ TableKindTranslit={
 	133:"ITOGO MYAKGOLISTVENNYH",
 }
 
-TableEncoding='cp866' # Russian DOS
+TableEncoding='utf-8'
 
 ForestKind={
 	101:1,
@@ -106,7 +107,7 @@ kind_exchange=100
 
 logging=0.02
 
-def f__add__(a,b): 
+def f__add__(a,b):
 	return a+b
 
 FuncTransTable={
@@ -160,7 +161,7 @@ class ModelParameter:
 		else:
 			self.__dict__.update(parameters_dict)
 		self._primitive=primitive
-			
+
 	def Convert(self, convert_func, parameter=None):
 		answer=ModelParameter(primitive=self._primitive)
 		for (key,value) in self.__dict__.items():
@@ -173,10 +174,10 @@ class ModelParameter:
 				setattr(answer, key, convert_func(value, parameter))
 			#print
 		return answer
-		
+
 	def __repr__(self):
 		return self.ReprTree("")
-		
+
 	def ReprTree(self, branchName):
 		s=""
 		items=self.__dict__.items()
@@ -194,7 +195,7 @@ class ModelParameter:
 			else:
 				s+="%s: %s\n" % (name, str(value))
 		return s
-		
+
 	def ForEachDo(self, leaf_func, parameter, branch_func=None, branch=None):
 		"""
 		branch_func must return 0 if not to go down the branches
@@ -212,7 +213,7 @@ class ModelParameter:
 					value.ForEachDo(leaf_func, parameter, branch_func, br)
 			else:
 				leaf_func(br, value, parameter)
-		
+
 	def __add__(self, other):
 		return self.interpret("__add__", [other])
 	def __sub__(self, other):
@@ -223,7 +224,7 @@ class ModelParameter:
 		return self.interpret("__div__", [other])
 #	def __float__(self, other):
 #		return self.interpret("__float__", [other])
-			
+
 	def dive(self, func, others):
 		items=self.__dict__.items()
 		items.sort()
@@ -237,7 +238,7 @@ class ModelParameter:
 					o.append(getattr(other,key))
 				else:
 					o.append(other)
-			
+
 			if type(value)==types.InstanceType and not value._primitive:
 				setattr(n, key, value.dive(func, o))
 			else:
@@ -246,11 +247,11 @@ class ModelParameter:
 				dict={}
 				for i in range(len(params)):
 					dict["a%s" % str(i)]=params[i]
-					
+
 				setattr(n, key, ModelParameter({func: ModelParameter(dict)}, primitive=1))
-				
+
 		return n
-			
+
 	def interpret(self, func, others):
 		items=self.__dict__.items()
 		items.sort()
@@ -264,15 +265,15 @@ class ModelParameter:
 					o.append(getattr(other,key))
 				else:
 					o.append(other)
-			
+
 			if type(value)==types.InstanceType and not value._primitive:
 				setattr(n, key, value.interpret(func, o))
 			else:
 				params=[value]+o
 				setattr(n, key, apply(FuncTransTable[func], params))
-				
+
 		return n
-			
+
 
 class TreeKind:
 	def __init__(self, data_row, descrs):
@@ -283,7 +284,7 @@ class TreeKind:
 		global VarNames
 		pos=0
 		for descr in descrs:
-			name=descr[0]
+			name=descr
 			try:
 				VarNames[name]
 				self.__dict__[name]=data[pos]
@@ -293,7 +294,7 @@ class TreeKind:
 
 	def AcceptNaturalTransitionConstants(self, data, descrs):
 		return self.AcceptData(data, descrs)
-		
+
 	def AcceptInterchangeConstants(self, data, descrs):
 		return self.AcceptData(data, descrs)
 
@@ -361,7 +362,7 @@ class TreeKind:
 		self.model.S.Per.next=othernodes
 
 		return self.model
-		
+
 	def PrepareStorage(self, obj):
 		S=ModelParameter({
 			"I":obj.__copy__(),
@@ -380,7 +381,7 @@ class TreeKind:
 			"Per":obj.__copy__()
 		})
 		return ModelParameter({"S":S,"V":V})
-			
+
 	def FillInValues(self, number, struct):
 		S=struct.S
 		MS=self.model.S
@@ -391,10 +392,10 @@ class TreeKind:
 		MV=self.model.V
 		V.I[number]=MV.I; 	V.II[number]=MV.II; V.Sr[number]=MV.Sr;
 		V.Pr[number]=MV.Pr; V.Sp[number]=MV.Sp; V.Per[number]=MV.Per;
-		
+
 	def Reset(self):
 		pass
-		
+
 	def AfterStates(self, modeller):
 		assert 1
 		self.model.V.I	= self.R1 * self.model.S.I.value
@@ -403,145 +404,163 @@ class TreeKind:
 		self.model.V.Pr	= self.Rpr * self.model.S.Pr.value
 		self.model.V.Sp	= self.Rsp * self.model.S.Sp.value
 		self.model.V.Per= self.Rper * self.model.S.Per.value
-		
+
 
 	def BeforeStates(self, modeller):
 		pass
 
 
 class ForestModel:
-	def __init__(self, dsn, year_id, Snel=0.0, Sempty=0.0, options=None):
-		if options is None:
-			self.options={}
-		else:
-			self.options=options
-		self.conn=ODBC.connect(dsn, user="", password="", clear_auto_commit=0)
-		self.dsn=dsn
-		cursor=self.conn.cursor()
-		cursor.execute('select * from "S%s$"' % str(year_id))
-		cursor_L=self.conn.cursor()
-		cursor_L.execute('select * from "grow%s$"' % str(year_id))
-		self.kinds=[]
-		struct=cursor.description
-		struct_L=cursor_L.description
-		
-		data=cursor.fetchone()
-		global ForestKind
-		while data:
-			try:
-				ForestKind[int(data[0])]	# hack!!!!
-				self.kinds.append(TreeKind(data, struct))
-			except KeyError:
-				pass
-			data=cursor.fetchone()
-		self.normalize()
-		
-		data=cursor_L.fetchone()
-		global ForestKind
-		while data:
-			try:
-				kind=self.kinds[int(data[0])] #hack!!!!
-				kind.AcceptNaturalTransitionConstants(data, struct_L)
-			except KeyError:
-				pass
-			data=cursor_L.fetchone()
-		del cursor_L, struct_L
-		
-		cursor.execute('select * from "free%s$"' % str(year_id))
-		struct=cursor.description
-		data=cursor.fetchone()
-		self.Sn=data[0]	# hack
-		self.S0=data[1]	# hack
-		self.n20=data[2]	# hack
-		
-		cursor.execute('select year,dSk from "cultures$"')
-		data=cursor.fetchone()
-		F101=self.kinds[101]
-		Lk1=F101.Lk1
-		S=0
-		year_last=int(year_id)
-		phase=1
-		self.USk={}
-		while data:
-			y=int(data[0])
-			dS=data[1]
-			dS=dS/1000.0 # to make thousents of ga (kga)
-			if y>year_last:
-				phase=3
-			if phase==1:
-				y_p=y
-				phase=2
-				S=dS
-			elif phase==2:
-				y_t=y
-				dy=y_t-y_p
-				S = S - S * (Lk1**dy) + dS	#dSk
-				y_p=y_t
-			else:
-				pass
-			self.USk[y]=dS
-			#print data[0], S, data[1]
-			data=cursor.fetchone()
-		print "Summary of Sk (kga):", S
-		try:
-			self.options["NO_CULTURES"]
-			self.Sk0=0.0
-			self.USk[year_last]=0.0
-			print "Warning: No cultures!"
-		except KeyError:
-			self.Sk0=S
-		del S,F101
-		
+    def __init__(self, filename, year_id, Snel=0.0, Sempty=0.0, options=None):
+        global ForestKind
+        if options is None:
+            self.options={}
+        else:
+            self.options=options
+            # self.conn=ODBC.connect(dsn, user="", password="", clear_auto_commit=0)
+        xl=self.excel=xlrd.open_workbook(filename, formatting_info=True)
+        self.filename=filename
+
+        """
+        sheet = self.excel.sheet_by_index(0)
+
+        for rownum in range(sheet.nrows):
+            row = sheet.row_values(rownum)
+            print row
+            #for c_el in row:
+            #    print c_el,
+            #print
+
+        return
+        """
+
+        s_page=xl.sheet_by_name("S%s" % year_id)
+        g_page=xl.sheet_by_name("grow%s" % year_id)
+
+        self.kinds=[]
+
+        for rn in range(s_page.nrows):
+            row=s_page.row_values(rn)
+            if rn==0:
+                s_struct=row
+                continue
+            try:
+                ForestKind[int(row[0])]
+                self.kinds.append(TreeKind(row, s_struct))
+            except KeyError:
+                pass
+
+        self.normalize()
+
+        for rn in range(g_page.nrows):
+            row=g_page.row_values(rn)
+            if rn==0:
+                g_struct=row
+                continue
+            try:
+                kind=self.kinds[int(row[0])] #hack!!!!
+                kind.AcceptNaturalTransitionConstants(row, g_struct)
+            except KeyError:
+                pass
+
+        del g_struct, s_struct
+        print self.kinds
+
+        return
+        cursor.execute('select * from "free%s$"' % str(year_id))
+        struct=cursor.description
+        data=cursor.fetchone()
+        self.Sn=data[0]	# hack
+        self.S0=data[1]	# hack
+        self.n20=data[2]	# hack
+        cursor.execute('select year,dSk from "cultures$"')
+        data=cursor.fetchone()
+        F101=self.kinds[101]
+        Lk1=F101.Lk1
+        S=0
+        year_last=int(year_id)
+        phase=1
+        self.USk={}
+        while data:
+            y=int(data[0])
+            dS=data[1]
+            dS=dS/1000.0 # to make thousents of ga (kga)
+            if y>year_last:
+                phase=3
+                if phase==1:
+                    y_p=y
+                    phase=2
+                    S=dS
+                elif phase==2:
+                    y_t=y
+                    dy=y_t-y_p
+                    S = S - S * (Lk1**dy) + dS	#dSk
+                    y_p=y_t
+                else:
+                    pass
+                    self.USk[y]=dS
+                    #print data[0], S, data[1]
+                    data=cursor.fetchone()
+                    print "Summary of Sk (kga):", S
+                    try:
+                        self.options["NO_CULTURES"]
+                        self.Sk0=0.0
+                        self.USk[year_last]=0.0
+                        print "Warning: No cultures!"
+                    except KeyError:
+                        self.Sk0=S
+                        del S,F101
+
 		cursor.execute('select * from "interchange%s$"' % str(year_id))
-		data=cursor.fetchone()
-		struct=cursor.description
-		while data:
-			try:
-				kind=int(data[0])
-				F=self.kinds[kind]
-				F.AcceptInterchangeConstants(data,struct)
-			except KeyError:
-				pass
-			data=cursor.fetchone()
-			
+        data=cursor.fetchone()
+        struct=cursor.description
+        while data:
+            try:
+                kind=int(data[0])
+                F=self.kinds[kind]
+                F.AcceptInterchangeConstants(data,struct)
+            except KeyError:
+                pass
+                data=cursor.fetchone()
+
 		cursor.execute('select * from "logging$"')
-		data=cursor.fetchone()
-		self.ULogging={}
-		while data:
-			self.ULogging[int(data[0])]=data[1] / 1000.0	# conversion to kga
-			data=cursor.fetchone()
-			
+        data=cursor.fetchone()
+        self.ULogging={}
+        while data:
+            self.ULogging[int(data[0])]=data[1] / 1000.0	# conversion to kga
+            data=cursor.fetchone()
+
 		# Cultural activity of habitants
-		cursor.execute('select * from "people%s$"' % str(year_id))
-		data=cursor.fetchone()
-		self.Sall=data[0]	# Al squaresl of the region (thousands of ga)
-		self.Ssx=data[1]	# Agricultural squares (thousands of ga)
-		self.N=data[2]		# No of habitants (thousants)
-		self.L=data[3]		# Length of roads (km)
-		self.KdN=data[4]	# Trend of habitants grow, i.e., N_{i+1} = KdN*N_{i}
-		self.KNn=data[5]	# Activity of habitants to get therritory rom forest
-		self.KdNsx=data[6] # How mush kgas to take by 1 thousants of habitants
+            cursor.execute('select * from "people%s$"' % str(year_id))
+            data=cursor.fetchone()
+            self.Sall=data[0]	# Al squaresl of the region (thousands of ga)
+            self.Ssx=data[1]	# Agricultural squares (thousands of ga)
+            self.N=data[2]		# No of habitants (thousants)
+            self.L=data[3]		# Length of roads (km)
+            self.KdN=data[4]	# Trend of habitants grow, i.e., N_{i+1} = KdN*N_{i}
+            self.KNn=data[5]	# Activity of habitants to get therritory rom forest
+            self.KdNsx=data[6] # How mush kgas to take by 1 thousants of habitants
 
 		# fires
-		cursor.execute('select * from "fires%s$"' % str(year_id))
-		data=cursor.fetchone()
-		self.KULogging=data[0]	# How much to fire when logging (0.88)
-		self.KfN=data[1]			# Fires due to habitants
-		self.KfL=data[2]			# Fires due to transport
-		self.KfSsx=data[3]		# Fires due to Agricultural interprises
-		self.dUf=data[4]			# Fires due to DRY storm
-			
+            cursor.execute('select * from "fires%s$"' % str(year_id))
+            data=cursor.fetchone()
+            self.KULogging=data[0]	# How much to fire when logging (0.88)
+            self.KfN=data[1]			# Fires due to habitants
+            self.KfL=data[2]			# Fires due to transport
+            self.KfSsx=data[3]		# Fires due to Agricultural interprises
+            self.dUf=data[4]			# Fires due to DRY storm
+
 
 	def BuildModel(self, species=None):
 		self.model=ModelParameter()
 		if species is None:
 			species=self.kinds.keys()
-			
+
 		# Transition from nonforest territory (S.Nel) to territory without (w/o) forest (S.O)
 		self.S=ModelParameter()
 		self.S.O=DMItem(self.S0)
 		self.S.Nel=DMItem(self.Sn, self.S.O, self.S.O, self.n20)
-		
+
 		head=self.S.Nel
 		# Natural forest grow
 		for s in species:
@@ -550,7 +569,7 @@ class ForestModel:
 			setattr(self.model,"f"+str(s),mdl.model)
 			head=path._first
 			del path._first
-			
+
 		# Forest curtures
 		self.F101=self.kinds[101]
 		self.F101.Sk=self.Sk0
@@ -570,13 +589,13 @@ class ForestModel:
 					m2=getattr(self.model, "f"+str(s2))
 					DMConnect(m1.S.Per, m2.S.Sr, getattr(k1, "Sper%i" % s2))
 					DMConnect(m1.S.Sp, m2.S.Sr, getattr(k1, "Ssp%i" % s2))
-		
+
 		return head	# of the nodelist
-		
+
 	def Reset(self):
 		for kind in self.kinds.values():
 			kind.Reset()
-			
+
 	def PrepareStorage(self, obj):
 		m=ModelParameter({"S":ModelParameter({"O":obj.__copy__(),"Nel":obj.__copy__()})})
 		for (name,value) in self.kinds.items():
@@ -584,11 +603,11 @@ class ForestModel:
 			if name==101:
 				m.f101.S.K=obj.__copy__()
 		return m
-		
+
 	def BeforeStates(self, modeller):
 		for kind in self.kinds.values():
 			kind.BeforeStates(modeller)
-		
+
 	def AfterStates(self, modeller):
 		for kind in self.kinds.values():
 			kind.AfterStates(modeller)
@@ -611,27 +630,27 @@ class ForestModel:
 				self.CalculateFires(modeller.dt)
 			self.Ssx += self.GetDSsx(modeller.dt)
 			self.N += self.GetDN(modeller.dt)
-				
 
-	def normalize(self):
-		d={}
-		for kind in self.kinds:
-			d[kind.Kind]=kind
-		self.kinds=d
-		
-	def CalculateCultures(self, dt):
-		uk = self.USk[1973] * dt
-		self.S.O.value -= uk
-		self.F101.model.S.K.value += uk
-		
-	def CalculateLogging(self, dt):
+    def normalize(self):
+        d={}
+        for kind in self.kinds:
+            d[kind.Kind]=kind
+
+        self.kinds=d
+
+    def CalculateCultures(self, dt):
+        uk = self.USk[1973] * dt
+        self.S.O.value -= uk
+        self.F101.model.S.K.value += uk
+
+    def CalculateLogging(self, dt):
 		Sper=0
 		Ssp=0
 		for (key, val) in self.kinds.items():
 			if key!=105:	# Kedr
 				Sper += val.model.S.Per.value
 				Ssp += val.model.S.Sp.value
-				
+
 		Srub=self.ULogging[1975] * dt
 		Sall=Sper + Ssp
 		for (key, val) in self.kinds.items():
@@ -641,11 +660,11 @@ class ForestModel:
 				val.model.S.Per.value -= dSper
 				val.model.S.Sp.value -= dSsp
 				self.S.O.value += dSper+dSsp
-				
-	def CalculateFires(self, dt):
+
+    def CalculateFires(self, dt):
 		S=0
 		states=["I","II", "Sr", "Pr", "Sp", "Per"]
-		
+
 		for (key, val) in self.kinds.items():
 			v = val.model.S
 			for state in states:
@@ -653,12 +672,12 @@ class ForestModel:
 				S += s
 			if key==101:	# Sosna cultres
 				S += v.K.value
-				
+
 		Sfires= self.KULogging * self.ULogging[1975] +\
 			self.KfN * self.N + self.KfL * self.L + self.KfSsx * self.Ssx + self.dUf
-			
+
 		Sfires *= dt
-			
+
 		for (key, val) in self.kinds.items():
 			v = val.model.S
 			for state in states:
@@ -666,33 +685,33 @@ class ForestModel:
 				ds=Sfires * n.value / S
 				n.value -= ds
 				self.S.O.value += ds
-				
+
 			if key==101:	# Sosna cultres
 				ds=Sfires * v.K.value / S
 				v.K.value -= ds
 				self.S.O.value += ds
-		
-	def FillInValues(self, number, struct):
+
+    def FillInValues(self, number, struct):
 		for (name,kind) in self.kinds.items():
 			kind.FillInValues(number, getattr(struct,"f"+str(name)))
 		struct.S.O[number]=self.S.O.value
 		struct.S.Nel[number]=self.S.Nel.value
-		
-	def GetDSsx(self, dt):
+
+    def GetDSsx(self, dt):
 		return self.GetDN(dt) * self.KdNsx
-		
-	def GetDN(self, dt):
+
+    def GetDN(self, dt):
 		# print self.N, self.KdN, dt
 		dN = self.N * self.KdN * dt
 		return dN
-			
-	def CalculateGetTerritory(self, dt):
-		dSN=self.KNn * self.GetDN(dt) 
-		dS=self.GetDSsx(dt) 
+
+    def CalculateGetTerritory(self, dt):
+		dSN=self.KNn * self.GetDN(dt)
+		dS=self.GetDSsx(dt)
 		dS += dSN
-		
+
 		states=["I","II", "Sr", "Pr", "Sp", "Per"]
-		
+
 		S=self.S.O.value
 		for (key, val) in self.kinds.items():
 			v = val.model.S
@@ -701,7 +720,7 @@ class ForestModel:
 				S += s
 			if key==101:	# Sosna cultres
 				S += v.K.value
-		
+
 		for (key, val) in self.kinds.items():
 			v = val.model.S
 			for state in states:
@@ -709,26 +728,26 @@ class ForestModel:
 				ds=dS * n.value / S
 				n.value -= ds
 				self.S.Nel.value += ds
-				
+
 			if key==101:	# Sosna cultres
 				ds=dS * v.K.value / S
 				v.K.value -= ds
 				self.S.Nel.value += ds
-				
+
 		ds=self.S.O.value * dS / S
 		self.S.Nel.value += ds
 		self.S.O.value -= ds
-		
-		
+
+
 	#def __del__(self):
 	#	del self.conn
-	
+
 class ForestModeller:
-	def __init__(self, 
-			forest_model, 
-			starttime=0.0, 
-			endtime=1.0, 
-			interval=1.0, 
+	def __init__(self,
+			forest_model,
+			starttime=0.0,
+			endtime=1.0,
+			interval=1.0,
 			subdivisions=10.0):
 		self.forest_model=forest_model
 		self.starttime=starttime
@@ -739,7 +758,7 @@ class ForestModeller:
 		#print "Values_to_store:", self.values_to_watch
 		self.model_head=self.forest_model.BuildModel()
 		self.Reset()
-	
+
 	def Reset(self):
 		self.time_moment=self.starttime
 		self.step_no=0
@@ -747,7 +766,7 @@ class ForestModeller:
 		self.forest_model.AfterStates(self)
 		self.prepareStorage()
 		pass
-		
+
 	def prepareStorage(self):
 		i=(self.endtime-self.starttime) / self.interval
 		self.range=int(math.ceil(i))+1
@@ -757,7 +776,7 @@ class ForestModeller:
 
 	def FillInValues(self, number):
 		self.forest_model.FillInValues(number, self.trajectories)
-	
+
 	def StepInterval(self):
 		for n in range(self.subdivisions):
 			self.forest_model.BeforeStates(self)
@@ -765,7 +784,7 @@ class ForestModeller:
 			self.forest_model.AfterStates(self)
 		self.step_no+=1
 		return self.step_no
-		
+
 	def Model(self):
 		while (self.StepInterval()<self.range): self.FillInValues(self.step_no)
 		self.trajectories.time=self.time
@@ -787,7 +806,7 @@ class ForestModeller:
 				return 0
 			else:
 				return 1
-				
+
 		_legends=[]
 		legends.ForEachDo(_leaf_func, (_legends, self.trajectories.time, gpm), branch_func=_branch_func)
 		return _legends
@@ -805,24 +824,24 @@ class ForestModeller:
 			gp("set output '%s'" % file)
 		if legends is None:
 			legends=self.trajectories
-			
+
 		_legends=self._makeLegends(Gnuplot, legends)
 		apply(gp.plot, _legends)
 		gp.reset()
 		del gp
-		
-	
+
+
 
 if __name__=="__main__":
 	# Quantum (begin)
 
-	F=ForestModel("forest", "1973", 
+	F=ForestModel("forest", "1973",
 #		options={"NO_LOGGING":None, "NO_FIRES":None, "NO_INTERCHANGE":None}
 #		options={"NO_INTERCHANGE":None}
 #		options={"NO_INTERCHANGE":None,"NO_LOGGING":None, "NO_FIRES":None, "NO_GET":None}
 		options={"NO_INTERCHANGE":None,"NO_FIRES":None, "NO_GET":None}
 	)
-	Modeller=ForestModeller(F, 
+	Modeller=ForestModeller(F,
 		endtime=50., starttime=0., interval=5., subdivisions=100)
 	control=Modeller.model_head.total
 	Modeller.Model()
@@ -835,10 +854,10 @@ if __name__=="__main__":
 			"Snel":Modeller.trajectories.S.Nel
 		}
 	)
-	
+
 	def All(kind):
 		return kind.I+kind.II+kind.Sr+kind.Pr+kind.Sp+kind.Per
-	
+
 	plot_max=ModelParameter(
 		{
 			"Sos":All(Modeller.trajectories.f101.S),
@@ -851,9 +870,9 @@ if __name__=="__main__":
 			"Free":(Modeller.trajectories.S)
 		}
 	)
-	
+
 	log_y_init="set logscale y"
-	
+
 	Modeller.Gnuplot("postscript","graph.eps", plot)
 	Modeller.Gnuplot("postscript","S.eps", Modeller.trajectories.S)
 	Modeller.Gnuplot("postscript","F101_S.eps", Modeller.trajectories.f101.S, initial_text=log_y_init)
@@ -865,7 +884,7 @@ if __name__=="__main__":
 	"""
 	# no cultures
 	FN=ForestModel("forest", "1973",  options={"NO_CULTURES":1})
-	ModellerN=ForestModeller(FN, 
+	ModellerN=ForestModeller(FN,
 		endtime=100., starttime=0., interval=10., subdivisions=100)
 	ModellerN.Model()
 	plot2=ModelParameter(
@@ -874,10 +893,10 @@ if __name__=="__main__":
 			"Snel":ModellerN.trajectories.S.Nel
 		}
 	)
-	
+
 	ModellerN.Gnuplot("postscript","graph2.eps", plot2)
 	ModellerN.Gnuplot("postscript","graph21.eps", plot2-plot)
 	"""
-	
-	
+
+
 	DModel.Finalize(1)
