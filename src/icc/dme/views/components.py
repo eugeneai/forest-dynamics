@@ -14,6 +14,9 @@ from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCan
 
 import pyxser
 
+SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
+
+
 def gsm():
     return zope.component.getGlobalSiteManager()
 
@@ -77,7 +80,7 @@ class DMEPlotView(View):
     def on_project_save(self, widget, filename):
         assert (self.model != None), "the model should be not None"
         o=open(filename, "w")
-        w=pyxser.serialize(self.model, enc='utf-8', depth=3)
+        w=pyxser.serialize(self.model, enc='utf-8', depth=SAVE_DEPTH)
         o.write(w)
         o.close()
         return True
