@@ -418,7 +418,7 @@ class ForestModel:
         else:
             self.options=options
             # self.conn=ODBC.connect(dsn, user="", password="", clear_auto_commit=0)
-        xl=self.excel=xlrd.open_workbook(filename, formatting_info=True)
+        xl=xlrd.open_workbook(filename, formatting_info=True)
         self.filename=filename
 
         s_page=xl.sheet_by_name("S%s" % year_id)
@@ -551,7 +551,7 @@ class ForestModel:
         del data
 
 
-	def BuildModel(self, species=None):
+    def BuildModel(self, species=None):
 		self.model=ModelParameter()
 		if species is None:
 			species=self.kinds.keys()
@@ -592,11 +592,11 @@ class ForestModel:
 
 		return head	# of the nodelist
 
-	def Reset(self):
+    def Reset(self):
 		for kind in self.kinds.values():
 			kind.Reset()
 
-	def PrepareStorage(self, obj):
+    def PrepareStorage(self, obj):
 		m=ModelParameter({"S":ModelParameter({"O":obj.__copy__(),"Nel":obj.__copy__()})})
 		for (name,value) in self.kinds.items():
 			setattr(m, "f"+str(name), value.PrepareStorage(obj))
@@ -604,11 +604,11 @@ class ForestModel:
 				m.f101.S.K=obj.__copy__()
 		return m
 
-	def BeforeStates(self, modeller):
+    def BeforeStates(self, modeller):
 		for kind in self.kinds.values():
 			kind.BeforeStates(modeller)
 
-	def AfterStates(self, modeller):
+    def AfterStates(self, modeller):
 		for kind in self.kinds.values():
 			kind.AfterStates(modeller)
 		if modeller.step_no>0:
@@ -743,41 +743,40 @@ class ForestModel:
 	#	del self.conn
 
 class ForestModeller:
-	def __init__(self,
-			forest_model,
-			starttime=0.0,
-			endtime=1.0,
-			interval=1.0,
-			subdivisions=10.0):
-		self.forest_model=forest_model
-		self.starttime=starttime
-		self.endtime=endtime
-		self.interval=interval
-		self.subdivisions=subdivisions
-		self.dt=self.interval/self.subdivisions
-		#print "Values_to_store:", self.values_to_watch
-		self.model_head=self.forest_model.BuildModel()
-		self.Reset()
+    def __init__(self,
+                 forest_model,
+                 starttime=0.0,
+                 endtime=1.0,
+                 interval=1.0,
+                 subdivisions=10.0):
+        self.forest_model=forest_model
+        self.starttime=starttime
+        self.endtime=endtime
+        self.interval=interval
+        self.subdivisions=subdivisions
+        self.dt=self.interval/self.subdivisions
+        #print "Values_to_store:", self.values_to_watch
+        self.model_head=self.forest_model.BuildModel()
+        self.Reset()
 
-	def Reset(self):
+    def Reset(self):
 		self.time_moment=self.starttime
 		self.step_no=0
 		self.forest_model.Reset()
 		self.forest_model.AfterStates(self)
 		self.prepareStorage()
-		pass
 
-	def prepareStorage(self):
-		i=(self.endtime-self.starttime) / self.interval
-		self.range=int(math.ceil(i))+1
-		self.time=arange(self.range, typecode=Float)*self.interval + self.starttime
-		self.trajectories=self.forest_model.PrepareStorage(zeros(self.range,Float))
-		self.FillInValues(0)
+    def prepareStorage(self):
+        i=(self.endtime-self.starttime) / self.interval
+        self.range=int(math.ceil(i))+1
+        self.time=arange(self.range, dtype=float_)*self.interval + self.starttime
+        self.trajectories=self.forest_model.PrepareStorage(zeros(self.range, dtype=float_))
+        self.FillInValues(0)
 
-	def FillInValues(self, number):
+    def FillInValues(self, number):
 		self.forest_model.FillInValues(number, self.trajectories)
 
-	def StepInterval(self):
+    def StepInterval(self):
 		for n in range(self.subdivisions):
 			self.forest_model.BeforeStates(self)
 			self.model_head.step(self.dt, 1)
@@ -785,11 +784,11 @@ class ForestModeller:
 		self.step_no+=1
 		return self.step_no
 
-	def Model(self):
+    def Model(self):
 		while (self.StepInterval()<self.range): self.FillInValues(self.step_no)
 		self.trajectories.time=self.time
 
-	def _makeLegends(self, gpm, legends):
+    def _makeLegends(self, gpm, legends):
 		def _leaf_func(fields, value, parameter):
 			(legends, time, gpm)=parameter
 			name=fields[-1]
@@ -812,7 +811,7 @@ class ForestModeller:
 		return _legends
 
 
-	def Gnuplot(self, device, file=None, legends=None, initial_text=""):
+    def Gnuplot(self, device, file=None, legends=None, initial_text=""):
 		import Gnuplot
 		gp=Gnuplot.Gnuplot(debug=0)
 		gp("set terminal %s monochrome" % device)
