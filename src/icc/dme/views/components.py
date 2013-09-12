@@ -66,9 +66,10 @@ class DMEPlotView(View):
     def on_project_open(self, widget, filename):
         if 1:
         #try:
-            i=open(filename)
+            i=open(filename, "r")
         #except IO:
-        model=pyxser.unserialize(i.read(), enc='utf=8', cinit=True)
+        s=i.read()
+        model=pyxser.unserialize(s, enc='utf-8', cinit=True)
         self.set_model(model)
         i.close()
         return True
@@ -76,8 +77,7 @@ class DMEPlotView(View):
     def on_project_save(self, widget, filename):
         assert (self.model != None), "the model should be not None"
         o=open(filename, "w")
-        w=pyxser.serialize(self.model, enc='utf-8', depth='3')
-        print "SAVE:",w
+        w=pyxser.serialize(self.model, enc='utf-8', depth=3)
         o.write(w)
         o.close()
         return True
