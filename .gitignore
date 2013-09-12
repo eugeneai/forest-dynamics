@@ -36,3 +36,4 @@ nosetests.xml
 /PKG-INFO
 python*/
 /tmp
+.~*#
