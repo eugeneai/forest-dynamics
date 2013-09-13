@@ -1,0 +1,6 @@
+[submodule "submodules/pyxser"]
+	path = submodules/pyxser
+	url = git@github.com:eugeneai/pyxser.git
+[submodule "submodules/rake"]
+	path = submodules/rake
+	url = git@github.com:eugeneai/dispersive.git
