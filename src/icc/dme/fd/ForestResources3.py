@@ -495,6 +495,7 @@ class ForestModel:
             #print data[0], S, data[1]
 
         print "Summary of Sk (kga):", S
+        print "Usk:", self.USk
 
         try:
             self.options["NO_CULTURES"]
