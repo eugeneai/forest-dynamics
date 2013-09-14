@@ -21,7 +21,7 @@ class TestConnect(object):
         A=DMItem(1)
         B=DMItem(2)
         C=DMConnect(A, B, 0.1)
-        self.y=(1,2,3)
+        self.y={0:"1"}
         self.b=BB()
         self.c=C
 
