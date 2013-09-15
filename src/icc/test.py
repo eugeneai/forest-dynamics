@@ -21,7 +21,8 @@ class TestConnect(object):
         A=DMItem(1)
         B=DMItem(2)
         C=DMConnect(A, B, 0.1)
-        self.y={0:"1"}
+        self.y={0:BB()}
+        self.z=self.y.items()
         self.b=BB()
         self.c=C
 
@@ -29,6 +30,7 @@ def main():
     rc=None
     a=TestConnect()
     rc=pyxser.serialize(a, enc='utf-8')
+    b=pyxser.unserialize(rc, enc='utf-8')
 
     print rc
 
