@@ -4,3 +4,6 @@
 [submodule "submodules/rake"]
 	path = submodules/rake
 	url = git@github.com:eugeneai/dispersive.git
+[submodule "submodules/jsonpickle"]
+	path = submodules/jsonpickle
+	url = git@github.com:eugeneai/jsonpickle.git

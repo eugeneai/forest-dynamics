@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 import matplotlib
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
 
-import pyxser
+import jsonpickle
 
 SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
 
@@ -37,17 +37,20 @@ class DMEPlotView(View):
     """
     """
 
+    template="ui/project_view.glade"
+    widget_names=["data", "sim", "model", "vbox"]
+
     def __init__(self, model=None, parent=None):
         """
         """
+        #import pdb; pdb.set_trace()
         View.__init__(self, model=model, parent=parent)
         self.parent_ui=pui=gsm().getUtility(
             icc.rake.views.interfaces.IApplication
         )
 
-        self.ui.main_frame=frame=Gtk.Frame()
-        vbox=Gtk.VBox()
-        frame.add(vbox)
+        frame=self.get_main_frame()
+        vbox=self.ui.vbox
 
         fig = Figure(figsize=(5,4), dpi=120,
             subplotpars=matplotlib.figure.SubplotParams(
@@ -72,15 +75,16 @@ class DMEPlotView(View):
             i=open(filename, "r")
         #except IO:
         s=i.read()
-        model=pyxser.unserialize(s, enc='utf-8', cinit=True)
-        self.set_model(model)
         i.close()
+        model=jsonpickle.decode(s)
+        self.set_model(model)
+        print 'Model loaded.'
         return True
 
     def on_project_save(self, widget, filename):
         assert (self.model != None), "the model should be not None"
         o=open(filename, "w")
-        w=pyxser.serialize(self.model, enc='utf-8', depth=SAVE_DEPTH)
+        w=jsonpickle.encode(self.model)
         o.write(w)
         o.close()
         return True

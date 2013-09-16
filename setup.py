@@ -20,7 +20,7 @@ setup(
     install_requires=[
         "setuptools",
         "icc.xray",
-        "pyxser",
+        "jsonpickle",
         "xlrd"
     ],
 
