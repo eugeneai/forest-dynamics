@@ -13,6 +13,7 @@ import matplotlib
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
 
 import jsonpickle
+import numpy
 
 SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
 
@@ -38,7 +39,7 @@ class DMEPlotView(View):
     """
 
     template="ui/project_view.glade"
-    widget_names=["data", "sim", "model", "vbox"]
+    widget_names=["data", "sim", "model", "data_box", "sim_box", "model_box"]
 
     def __init__(self, model=None, parent=None):
         """
@@ -50,7 +51,7 @@ class DMEPlotView(View):
         )
 
         frame=self.get_main_frame()
-        vbox=self.ui.vbox
+        vbox=self.ui.sim_box
 
         fig = Figure(figsize=(5,4), dpi=120,
             subplotpars=matplotlib.figure.SubplotParams(
@@ -60,14 +61,35 @@ class DMEPlotView(View):
                 top=0.96)
         )
 
+        self.ui.fig = fig
+        #self.ui.ax = fig.add_subplot(111)
+
         canvas=FigureCanvas(fig)
+        self.ui.canvas=canvas
         canvas.set_size_request(600,400)
         vbox.pack_start(canvas, True, True, 0)
         toolbar=DMENavigatorToolbar(canvas, self)
 
         parent.connect("project-open", self.on_project_open)
         parent.connect("project-save", self.on_project_save)
-        self.invalidate_model(model)
+
+    def on_model_changed(self, model):
+        self.paint_model()
+
+    def paint_model(self):
+        model = self.model
+        fig = self.ui.fig
+        fig.clear()
+        if not model:
+            return
+
+        self.ui.ax = ax = fig.add_subplot(111)
+        ax.set_ylabel("Amount/Volumes")
+        ax.set_xlabel("Years")
+
+        t = numpy.arange(0.0,3.0,0.01)
+        s = numpy.sin(2*numpy.pi*t)
+        pl= ax.plot(t,s, aa=True, linewidth=0.5, alpha=0.5)
 
     def on_project_open(self, widget, filename):
         if 1:
