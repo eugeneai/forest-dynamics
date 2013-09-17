@@ -9,7 +9,14 @@ class Project(object):
     implements(IProject)
 
     def __init__(self):
-        self.setup_test_model()
+        self.prepared=False
+        self.computed=False
+
+    def prepare(self):
+        rc = self.setup_test_model()
+        self.prepared = rc
+        self.computed = False
+        return rc
 
     def setup_test_model(self):
         excel_file=get_user_config_option("source", type='string', keys='data_source')
@@ -23,8 +30,13 @@ class Project(object):
 		options={"NO_INTERCHANGE":None,"NO_FIRES":None, "NO_GET":None}
         )
         #self.do_something()
+        return True
 
-    def do_something(self):
+    def simulate(self):
+        if not self.prepared:
+            print "Preparin model at first!"
+            self.setup_test_model()
+
         F=self.fm
         self.modeller = Modeller = ForestModeller(F,
             endtime=50., starttime=0., interval=5., subdivisions=100)
@@ -58,3 +70,4 @@ class Project(object):
         )
 
         log_y_init="set logscale y"
+        self.computed=True

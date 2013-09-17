@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkActionGroup" id="ag_simulation">
+    <child>
+      <object class="GtkAction" id="ac_simulate">
+        <property name="label" translatable="yes">Simulate</property>
+        <property name="tooltip" translatable="yes">Run the simulation.</property>
+        <property name="stock_id">gtk-execute</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <child>

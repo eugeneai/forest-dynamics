@@ -39,7 +39,7 @@ class DMEPlotView(View):
     """
 
     template="ui/project_view.glade"
-    widget_names=["data", "sim", "model", "data_box", "sim_box", "model_box"]
+    widget_names=["data", "sim", "model", "data_box", "sim_box", "model_box", "ag_simulation"]
 
     def __init__(self, model=None, parent=None):
         """
@@ -49,6 +49,9 @@ class DMEPlotView(View):
         self.parent_ui=pui=gsm().getUtility(
             icc.rake.views.interfaces.IApplication
         )
+
+        self.add_actions_to_toolbar(self.ui.ag_simulation, importand=True)
+        self.add_actions_to_menu(self.ui.ag_simulation, label="Simulation")
 
         frame=self.get_main_frame()
         vbox=self.ui.sim_box
@@ -80,7 +83,7 @@ class DMEPlotView(View):
         model = self.model
         fig = self.ui.fig
         fig.clear()
-        if not model:
+        if not model or not model.prepared:
             return
 
         self.ui.ax = ax = fig.add_subplot(111)
@@ -99,6 +102,7 @@ class DMEPlotView(View):
         s=i.read()
         i.close()
         model=jsonpickle.decode(s)
+        model.prepared=False
         self.set_model(model)
         print 'Model loaded.'
         return True
@@ -110,3 +114,15 @@ class DMEPlotView(View):
         o.write(w)
         o.close()
         return True
+
+    def on_ac_simulate_activate(self, widget):
+        print "Simulation"
+        if not model.prepared:
+            model.prepare()
+            if not model.prepared():
+                print "FATAL:Cannon prepare model for simulation."
+        if not model.computed:
+            model.simulate()
+
+        if model.computed:
+            self.invalidate_model(self.model)
