@@ -44,13 +44,13 @@ class DMEPlotView(View):
     def __init__(self, model=None, parent=None):
         """
         """
-        #import pdb; pdb.set_trace()
         View.__init__(self, model=model, parent=parent)
         self.parent_ui=pui=gsm().getUtility(
             icc.rake.views.interfaces.IApplication
         )
 
-        self.add_actions_to_toolbar(self.ui.ag_simulation, important=True)
+
+        self.add_actions_to_toolbar(self.ui.ag_simulation, important_only=False)
         self.add_actions_to_menu(self.ui.ag_simulation, label="Simulation")
 
         frame=self.get_main_frame()
