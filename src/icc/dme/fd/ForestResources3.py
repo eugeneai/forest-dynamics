@@ -155,14 +155,21 @@ def NewItem():
 	return DModel.NewItem()
 
 class ModelParameter:
-	def __init__(self, parameters_dict=None, primitive=0):
+    def __init__(self, parameters_dict=None, primitive=0):
 		if parameters_dict is None:
 			pass
 		else:
 			self.__dict__.update(parameters_dict)
+			self._keys=parameters_dict.keys()
 		self._primitive=primitive
 
-	def Convert(self, convert_func, parameter=None):
+    def keys(self):
+        return self._keys
+
+    def item(self, key):
+        return getattr(self, key)
+
+    def Convert(self, convert_func, parameter=None):
 		answer=ModelParameter(primitive=self._primitive)
 		for (key,value) in self.__dict__.items():
 			if key[0]=="_" and key[1]!="_":
@@ -175,10 +182,10 @@ class ModelParameter:
 			#print
 		return answer
 
-	def __repr__(self):
+    def __repr__(self):
 		return self.ReprTree("")
 
-	def ReprTree(self, branchName):
+    def ReprTree(self, branchName):
 		s=""
 		items=self.__dict__.items()
 		items.sort()
@@ -196,7 +203,7 @@ class ModelParameter:
 				s+="%s: %s\n" % (name, str(value))
 		return s
 
-	def ForEachDo(self, leaf_func, parameter, branch_func=None, branch=None):
+    def ForEachDo(self, leaf_func, parameter, branch_func=None, branch=None):
 		"""
 		branch_func must return 0 if not to go down the branches
 		if branch_func==None then the search always go down to the leaves
@@ -214,18 +221,18 @@ class ModelParameter:
 			else:
 				leaf_func(br, value, parameter)
 
-	def __add__(self, other):
+    def __add__(self, other):
 		return self.interpret("__add__", [other])
-	def __sub__(self, other):
+    def __sub__(self, other):
 		return self.interpret("__sub__", [other])
-	def __mul__(self, other):
+    def __mul__(self, other):
 		return self.interpret("__mul__", [other])
-	def __div__(self, other):
+    def __div__(self, other):
 		return self.interpret("__div__", [other])
 #	def __float__(self, other):
 #		return self.interpret("__float__", [other])
 
-	def dive(self, func, others):
+    def dive(self, func, others):
 		items=self.__dict__.items()
 		items.sort()
 		n=ModelParameter()
@@ -252,7 +259,7 @@ class ModelParameter:
 
 		return n
 
-	def interpret(self, func, others):
+    def interpret(self, func, others):
 		items=self.__dict__.items()
 		items.sort()
 		n=ModelParameter()
@@ -494,8 +501,7 @@ class ForestModel:
             self.USk[y]=dS
             #print data[0], S, data[1]
 
-        print "Summary of Sk (kga):", S
-        print "Usk:", self.USk
+        # print "Summary of Sk (kga):", S
 
         try:
             self.options["NO_CULTURES"]
