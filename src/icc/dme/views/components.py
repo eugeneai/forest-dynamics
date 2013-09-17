@@ -50,7 +50,7 @@ class DMEPlotView(View):
             icc.rake.views.interfaces.IApplication
         )
 
-        self.add_actions_to_toolbar(self.ui.ag_simulation, importand=True)
+        self.add_actions_to_toolbar(self.ui.ag_simulation, important=True)
         self.add_actions_to_menu(self.ui.ag_simulation, label="Simulation")
 
         frame=self.get_main_frame()
@@ -76,7 +76,7 @@ class DMEPlotView(View):
         parent.connect("project-open", self.on_project_open)
         parent.connect("project-save", self.on_project_save)
 
-    def on_model_changed(self, model):
+    def on_model_changed(self, view, model):
         self.paint_model()
 
     def paint_model(self):
