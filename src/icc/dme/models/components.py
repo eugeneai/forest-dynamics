@@ -22,7 +22,7 @@ class Project(object):
 #		options={"NO_INTERCHANGE":None,"NO_LOGGING":None, "NO_FIRES":None, "NO_GET":None}
 		options={"NO_INTERCHANGE":None,"NO_FIRES":None, "NO_GET":None}
         )
-        self.do_something()
+        #self.do_something()
 
     def do_something(self):
         F=self.fm
