@@ -14,6 +14,7 @@ from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCan
 
 import jsonpickle
 import numpy
+import types
 
 SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
 
@@ -58,9 +59,9 @@ class DMEPlotView(View):
 
         fig = Figure(figsize=(5,4), dpi=120,
             subplotpars=matplotlib.figure.SubplotParams(
-                left=0.03,
+                left=0.1,
                 right=0.96,
-                bottom=0.03,
+                bottom=0.1,
                 top=0.96)
         )
 
@@ -90,9 +91,41 @@ class DMEPlotView(View):
         ax.set_ylabel("Amount/Volumes")
         ax.set_xlabel("Years")
 
-        t = numpy.arange(0.0,3.0,0.01)
-        s = numpy.sin(2*numpy.pi*t)
-        pl= ax.plot(t,s, aa=True, linewidth=0.5, alpha=0.5)
+        t = model.modeller.trajectories.time
+
+        def _plot(name, val):
+            pl= ax.plot(t, val, aa=True, linewidth=0.5, alpha=0.9, label=name)
+
+        def _each(model_parameter, pref=[]):
+            if type(model_parameter) == types.InstanceType:
+                for k in model_parameter.keys():
+                    v = model_parameter.item(k)
+                    _each(v, pref=pref+[k])
+            else:
+                _plot(".".join(pref), model_parameter)
+
+        _each(model.result.plot)
+
+        ax.grid(b=True, aa=False, alpha=0.3)
+        ax.minorticks_on()
+
+        FONT_SIZE=7
+        for tick in ax.xaxis.get_major_ticks():
+            tick.label.set_fontsize(FONT_SIZE)
+        for tick in ax.yaxis.get_major_ticks():
+            tick.label.set_fontsize(FONT_SIZE)
+
+        legend=ax.legend(
+            loc="center right",
+            shadow=True)
+        # Set the fontsize
+        for label in legend.get_texts():
+            label.set_fontsize(FONT_SIZE)
+
+        for label in legend.get_lines():
+            label.set_linewidth(0.5)  # the legend line width
+
+        self.ui.canvas.draw_idle()
 
     def on_project_open(self, widget, filename):
         if 1:
@@ -117,12 +150,7 @@ class DMEPlotView(View):
 
     def on_ac_simulate_activate(self, widget):
         print "Simulation"
-        if not model.prepared:
-            model.prepare()
-            if not model.prepared():
-                print "FATAL:Cannon prepare model for simulation."
-        if not model.computed:
-            model.simulate()
-
+        model=self.model
+        model.simulate()
         if model.computed:
             self.invalidate_model(self.model)

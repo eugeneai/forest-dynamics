@@ -7,6 +7,7 @@
         <property name="label" translatable="yes">Simulate</property>
         <property name="tooltip" translatable="yes">Run the simulation.</property>
         <property name="stock_id">gtk-execute</property>
+        <signal name="activate" handler="on_ac_simulate_activate" swapped="no"/>
       </object>
     </child>
   </object>
