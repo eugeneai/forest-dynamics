@@ -4,6 +4,9 @@ from interfaces import *
 from icc.dme.fd import *
 from icc.rake.views import get_user_config_option, set_user_config_option
 
+class Data():
+    pass
+
 class Project(object):
 
     implements(IProject)
@@ -27,26 +30,28 @@ class Project(object):
 #		options={"NO_LOGGING":None, "NO_FIRES":None, "NO_INTERCHANGE":None}
 #		options={"NO_INTERCHANGE":None}
 #		options={"NO_INTERCHANGE":None,"NO_LOGGING":None, "NO_FIRES":None, "NO_GET":None}
-		options={"NO_INTERCHANGE":None,"NO_FIRES":None, "NO_GET":None}
+#		options={"NO_INTERCHANGE":None,"NO_FIRES":None, "NO_GET":None}
         )
         #self.do_something()
         return True
 
     def simulate(self):
         if not self.prepared:
-            print "Preparin model at first!"
-            self.setup_test_model()
+            self.prepare()
+            if not self.prepared:
+                print "FATAL:Cannon prepare model for simulation."
 
         F=self.fm
-        self.modeller = Modeller = ForestModeller(F,
-            endtime=50., starttime=0., interval=5., subdivisions=100)
-        control=Modeller.model_head.total
+        self.modeller = modeller =  Modeller = ForestModeller(F,
+            endtime=50., starttime=0., interval=1., subdivisions=100)
+        self.result=rc=Data()
+        rc.control=control=Modeller.model_head.total
         Modeller.Model()
         print "Modelling done."
 
         # Quantum (end)
 
-        plot=ModelParameter(
+        rc.plot=plot=ModelParameter(
             {
                 "Sfree":Modeller.trajectories.S.O,
                 "Snel":Modeller.trajectories.S.Nel
@@ -56,7 +61,7 @@ class Project(object):
         def All(kind):
             return kind.I+kind.II+kind.Sr+kind.Pr+kind.Sp+kind.Per
 
-        plot_max=ModelParameter(
+        rc.plot=plot_max=ModelParameter(
             {
                 "Sos":All(Modeller.trajectories.f101.S),
                 "El":All(Modeller.trajectories.f102.S),
@@ -65,9 +70,10 @@ class Project(object):
                 "Kedr":All(Modeller.trajectories.f105.S),
                 "Bereza":All(Modeller.trajectories.f124.S),
                 "Osina":All(Modeller.trajectories.f125.S),
-                "Free":(Modeller.trajectories.S)
+                "Free":Modeller.trajectories.S
             }
         )
+
 
         log_y_init="set logscale y"
         self.computed=True
