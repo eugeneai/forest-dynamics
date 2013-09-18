@@ -21,7 +21,8 @@ setup(
         "setuptools",
         "icc.xray",
         "jsonpickle",
-        "xlrd"
+        "xlrd",
+        "pygraphviz"
     ],
 
 	ext_modules=[Extension( "icc.dme.fd.DModel",
