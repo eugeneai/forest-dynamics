@@ -559,45 +559,45 @@ class ForestModel:
 
 
     def BuildModel(self, species=None):
-		self.model=ModelParameter()
-		if species is None:
-			species=self.kinds.keys()
 
-		# Transition from nonforest territory (S.Nel) to territory without (w/o) forest (S.O)
-		self.S=ModelParameter()
-		self.S.O=DMItem(self.S0)
-		self.S.Nel=DMItem(self.Sn, self.S.O, self.S.O, self.n20)
+        self.model=ModelParameter()
+        if species is None:
+            species=self.kinds.keys()
 
-		head=self.S.Nel
-		# Natural forest grow
-		for s in species:
-			mdl=self.kinds[s]
-			path=mdl.BuildModel(self.S.O, head)
-			setattr(self.model,"f"+str(s),mdl.model)
-			head=path._first
-			del path._first
+        # Transition from nonforest territory (S.Nel) to territory without (w/o) forest (S.O)
+        self.S=ModelParameter()
+        self.S.O=DMItem(self.S0)
+        self.S.Nel=DMItem(self.Sn, self.S.O, self.S.O, self.n20)
+        head=self.S.Nel
+        # Natural forest grow
+        for s in species:
+            mdl=self.kinds[s]
+            path=mdl.BuildModel(self.S.O, head)
+            setattr(self.model,"f"+str(s),mdl.model)
+            head=path._first
+            del path._first
 
 		# Forest curtures
-		self.F101=self.kinds[101]
-		self.F101.Sk=self.Sk0
-		self.F101.model.S.K=DMItem(self.F101.Sk, head, self.F101.model.S.I, self.F101.Lk1)
-		head=self.F101.model.S.K
+        self.F101=self.kinds[101]
+        self.F101.Sk=self.Sk0
+        self.F101.model.S.K=DMItem(self.F101.Sk, head, self.F101.model.S.I, self.F101.Lk1)
+        head=self.F101.model.S.K
 
 		# Kind exchange
-		try:
-			self.options["NO_INTERCHANGE"]
-			print "Warning no species interchange!"
-		except KeyError:
-			for s1 in species:
-				m1=getattr(self.model, "f"+str(s1))
-				k1=self.kinds[s1]
-				for s2 in species:
-					k2=self.kinds[s2]
-					m2=getattr(self.model, "f"+str(s2))
-					DMConnect(m1.S.Per, m2.S.Sr, getattr(k1, "Sper%i" % s2))
-					DMConnect(m1.S.Sp, m2.S.Sr, getattr(k1, "Ssp%i" % s2))
+        try:
+            self.options["NO_INTERCHANGE"]
+            print "Warning no species interchange!"
+        except KeyError:
+            for s1 in species:
+                m1=getattr(self.model, "f"+str(s1))
+                k1=self.kinds[s1]
+                for s2 in species:
+                    k2=self.kinds[s2]
+                    m2=getattr(self.model, "f"+str(s2))
+                    DMConnect(m1.S.Per, m2.S.Sr, getattr(k1, "Sper%i" % s2))
+                    DMConnect(m1.S.Sp, m2.S.Sr, getattr(k1, "Ssp%i" % s2))
 
-		return head	# of the nodelist
+        return head	# of the nodelist
 
     def Reset(self):
 		for kind in self.kinds.values():
