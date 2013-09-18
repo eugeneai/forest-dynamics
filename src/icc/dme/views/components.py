@@ -16,8 +16,13 @@ import jsonpickle
 import numpy
 import types
 
-SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
+import pygraphviz as pgv
+import sys
 
+from gi.repository.GdkPixbuf import Pixbuf
+
+SAVE_DEPTH = 0  # 0 means 50 according to pyxser source pyxser.c
+TMP_DIR="/tmp"
 
 def gsm():
     return zope.component.getGlobalSiteManager()
@@ -40,7 +45,11 @@ class DMEPlotView(View):
     """
 
     template="ui/project_view.glade"
-    widget_names=["data", "sim", "model", "data_box", "sim_box", "model_box", "ag_simulation"]
+    widget_names=["data", "sim", "model",
+                  "data_box", "sim_box", "model_box",
+                  "ag_simulation",
+                  "graph_image"
+    ]
 
     def __init__(self, model=None, parent=None):
         """
@@ -50,6 +59,7 @@ class DMEPlotView(View):
             icc.rake.views.interfaces.IApplication
         )
 
+        self.ui.graph_image.clear()
 
         self.add_actions_to_toolbar(self.ui.ag_simulation, important_only=False)
         self.add_actions_to_menu(self.ui.ag_simulation, label="Simulation")
@@ -79,6 +89,7 @@ class DMEPlotView(View):
 
     def on_model_changed(self, view, model):
         self.paint_model()
+        self.paint_graph()
 
     def paint_model(self):
         model = self.model
@@ -126,6 +137,32 @@ class DMEPlotView(View):
             label.set_linewidth(0.5)  # the legend line width
 
         self.ui.canvas.draw_idle()
+
+    def paint_graph(self):
+        image=self.ui.graph_image
+        if not model or not model.prepared:
+            image.clear()
+            return
+
+        G=pgv.AGraph()
+        G.add_node('a')
+        G.add_edge('b','c')
+
+        G.graph_attr['label']='A Graph'
+        G.node_attr['shape']='circle'
+        G.edge_attr['color']='blue'
+        s=G.string()
+
+        G.write(sys.stdout)
+        G.layout(prog='dot')
+
+        fn=os.path.join(TMP_DIR, 'graph.png')
+
+        s=G.draw(fn, format='png')
+
+        pb=Pixbuf.new_from_file(fn)
+        image.set_from_pixbuf(pb)
+        #image.set_from_stock("gtk-dialog-question", 64)
 
     def on_project_open(self, widget, filename):
         if 1:
