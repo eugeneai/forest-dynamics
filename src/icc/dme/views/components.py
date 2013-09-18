@@ -140,20 +140,51 @@ class DMEPlotView(View):
 
     def paint_graph(self):
         image=self.ui.graph_image
+        model=self.model
         if not model or not model.prepared:
             image.clear()
             return
 
+        rect=image.get_allocation()
+        print rect.height, rect.width
+
+        G=pgv.AGraph(directed=True)
+        node=model.modeller.model_head
+        nodes={}
+        arcs=[]
+
+        n=node
+
+        def _node(n):
+            if n in nodes:
+                return
+            nodes[n]=id(n)
+            G.add_node(id(n))
+
+        while node:
+            _node(node)
+
+            edge = node.another
+
+            while edge:
+                n=edge.another
+                _node(n)
+                G.add_edge(id(node),id(n))
+                edge=edge.next
+
+            node=node.next
+
+
+        """
         G=pgv.AGraph()
         G.add_node('a')
         G.add_edge('b','c')
+        """
 
         G.graph_attr['label']='A Graph'
         G.node_attr['shape']='circle'
         G.edge_attr['color']='blue'
-        s=G.string()
 
-        G.write(sys.stdout)
         G.layout(prog='dot')
 
         fn=os.path.join(TMP_DIR, 'graph.png')
