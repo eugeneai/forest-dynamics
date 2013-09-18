@@ -1,21 +1,21 @@
 import DModel
 def DMConnect(item, to, value):
-	answer=DModel.NewItem()
-	answer.next=item.another
-	item.another=answer
-	answer.another=to
-	answer.value=value
-	answer.initValue=value
-	return answer
+	edge=DModel.NewItem()
+	edge.another=to
+	edge.value=value
+	edge.initValue=value
+
+	edge.next=item.another
+	item.another=edge
+
+	return edge
 
 def DMItem(value, next=None, connect_to=None, intens=0.0):
-	answer=DModel.NewItem()
-	answer.value=value
-	answer.initValue=value
-	answer.next=next
+	node=DModel.NewItem()
+	node.value=value
+	node.initValue=value
+	node.next=next
 	if connect_to is None:
-		return answer
-	DMConnect(answer, connect_to, intens)
-	return answer
-	
-
+		return node
+	DMConnect(node, connect_to, intens)
+	return node
