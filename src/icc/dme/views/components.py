@@ -151,6 +151,18 @@ class DMEPlotView(View):
         G=pgv.AGraph(directed=True)
         node=model.modeller.model_head
         nodes={}
+
+        def _lf(br, v, p):
+            try:
+                v.value
+                n='.'.join(br)
+                nodes[v]=n
+                G.add_node(n)
+            except AttributeError:
+                pass
+
+        model.modeller.forest_model.model.ForEachDo(_lf)
+
         arcs=[]
 
         n=node
@@ -169,31 +181,29 @@ class DMEPlotView(View):
             while edge:
                 n=edge.another
                 _node(n)
-                G.add_edge(id(node),id(n))
+                G.add_edge(nodes[node],nodes[n], color='blue')
                 edge=edge.next
+
+#            if node.next:
+#                _node(node.next)
+#                G.add_edge(id(node),id(node.next), color='red')
 
             node=node.next
 
 
-        """
-        G=pgv.AGraph()
-        G.add_node('a')
-        G.add_edge('b','c')
-        """
-
         G.graph_attr['label']='A Graph'
         G.node_attr['shape']='circle'
-        G.edge_attr['color']='blue'
 
         G.layout(prog='dot')
 
         fn=os.path.join(TMP_DIR, 'graph.png')
 
         s=G.draw(fn, format='png')
+        G.draw("xdot.dot", format='xdot')
 
         pb=Pixbuf.new_from_file(fn)
+
         image.set_from_pixbuf(pb)
-        #image.set_from_stock("gtk-dialog-question", 64)
 
     def on_project_open(self, widget, filename):
         if 1:
