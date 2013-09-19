@@ -7,3 +7,6 @@
 [submodule "submodules/jsonpickle"]
 	path = submodules/jsonpickle
 	url = git@github.com:eugeneai/jsonpickle.git
+[submodule "submodules/xdot"]
+	path = submodules/xdot
+	url = git@github.com:eugeneai/xdot.py.git
