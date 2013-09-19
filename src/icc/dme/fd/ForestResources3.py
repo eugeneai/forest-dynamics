@@ -567,9 +567,9 @@ class ForestModel:
             species=self.kinds.keys()
 
         # Transition from nonforest territory (S.Nel) to territory without (w/o) forest (S.O)
-        self.S=ModelParameter()
-        self.S.O=DMItem(self.S0)
-        self.S.Nel=DMItem(self.Sn, self.S.O, self.S.O, self.n20)
+        self.model.S=self.S=ModelParameter()
+        self.model.S.O=self.S.O=DMItem(self.S0)
+        self.model.S.Nel=self.S.Nel=DMItem(self.Sn, self.S.O, self.S.O, self.n20)
         head=self.S.Nel
         # Natural forest grow
         for s in species:
