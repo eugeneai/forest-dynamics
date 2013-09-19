@@ -203,22 +203,24 @@ class ModelParameter:
 				s+="%s: %s\n" % (name, str(value))
 		return s
 
-    def ForEachDo(self, leaf_func, parameter, branch_func=None, branch=None):
-		"""
-		branch_func must return 0 if not to go down the branches
-		if branch_func==None then the search always go down to the leaves
-		"""
-		items=self.__dict__.items()
-		items.sort()
-		for (key,value) in items:
-			if branch is None:
-				br=[key]
-			else:
-				br=branch+[key]
-			if type(value)==types.InstanceType:
-				if branch_func is None or branch_func(br, value, parameter):
+    def ForEachDo(self, leaf_func, parameter=None, branch_func=None, branch=None):
+        """
+        branch_func must return 0 if not to go down the branches
+        if branch_func==None then the search always go down to the leaves
+        """
+        items=self.__dict__.items()
+        items.sort()
+        for (key,value) in items:
+            if key.startswith("_"):
+                continue
+            if branch is None:
+                br=[key]
+            else:
+                br=branch+[key]
+            if type(value)==types.InstanceType:
+                if branch_func is None or branch_func(br, value, parameter):
 					value.ForEachDo(leaf_func, parameter, branch_func, br)
-			else:
+            else:
 				leaf_func(br, value, parameter)
 
     def __add__(self, other):
