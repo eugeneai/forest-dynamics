@@ -426,7 +426,7 @@ class ForestModel:
             self.options={}
         else:
             self.options=options
-            # self.conn=ODBC.connect(dsn, user="", password="", clear_auto_commit=0)
+
         xl=xlrd.open_workbook(filename, formatting_info=True)
         self.filename=filename
 
@@ -512,7 +512,7 @@ class ForestModel:
             print "Warning: No cultures!"
         except KeyError:
             self.Sk0=S
-            del S,F101
+        del S,F101
 
         del data, c_page
 
@@ -546,8 +546,8 @@ class ForestModel:
         self.N=data[2]		# No of habitants (thousants)
         self.L=data[3]		# Length of roads (km)
         self.KdN=data[4]	# Trend of habitants grow, i.e., N_{i+1} = KdN*N_{i}
-        self.KNn=data[5]	# Activity of habitants to get therritory rom forest
-        self.KdNsx=data[6] # How mush kgas to take by 1 thousants of habitants
+        self.KNn=data[5]	# Activity of habitants to get therritory from forest
+        self.KdNsx=data[6]  # How mush kgas to take by 1 thousants of habitants
         del data
 
 		# fires
