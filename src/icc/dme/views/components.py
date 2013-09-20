@@ -17,6 +17,7 @@ import numpy
 import types
 
 import pygraphviz as pgv
+import xdot
 import sys
 
 from gi.repository.GdkPixbuf import Pixbuf
@@ -48,7 +49,8 @@ class DMEPlotView(View):
     widget_names=["data", "sim", "model",
                   "data_box", "sim_box", "model_box",
                   "ag_simulation",
-                  "graph_image"
+                  "graph_viewport"
+#                  "graph_image"
     ]
 
     def __init__(self, model=None, parent=None):
@@ -59,7 +61,7 @@ class DMEPlotView(View):
             icc.rake.views.interfaces.IApplication
         )
 
-        self.ui.graph_image.clear()
+        # self.ui.graph_image.clear()
 
         self.add_actions_to_toolbar(self.ui.ag_simulation, important_only=False)
         self.add_actions_to_menu(self.ui.ag_simulation, label="Simulation")
@@ -86,6 +88,13 @@ class DMEPlotView(View):
 
         parent.connect("project-open", self.on_project_open)
         parent.connect("project-save", self.on_project_save)
+
+        dot_widget=self.ui.dot_widget = xdot.DotWidget()
+        self.ui.graph_viewport.add(dot_widget)
+        xdot_setup=xdot.DotWindowSetup(pui.ui.window, dot_widget)
+        xdot_setup()
+        #dot_window.reparent(self.ui.graph_viewport)
+
 
     def on_model_changed(self, view, model):
         self.paint_model()
@@ -139,14 +148,14 @@ class DMEPlotView(View):
         self.ui.canvas.draw_idle()
 
     def paint_graph(self):
-        image=self.ui.graph_image
+        #image=self.ui.graph_image
         model=self.model
         if not model or not model.prepared:
-            image.clear()
+            #image.clear()
             return
 
-        rect=image.get_allocation()
-        print rect.height, rect.width
+        #rect=image.get_allocation()
+        #print rect.height, rect.width
 
         G=pgv.AGraph(directed=True)
         node=model.modeller.model_head
@@ -194,16 +203,24 @@ class DMEPlotView(View):
         G.graph_attr['label']='A Graph'
         G.node_attr['shape']='circle'
 
-        G.layout(prog='dot')
+        G.layout(prog='dot') #fdp, sfdp, dot
+
+        #  twopi, gvcolor, wc, ccomps, tred, sccmap, fdp, circo, neato, acyclic, nop, gvpr, dot, sfdp.
 
         fn=os.path.join(TMP_DIR, 'graph.png')
 
-        s=G.draw(fn, format='png')
-        G.draw("xdot.dot", format='xdot')
+        #s=G.draw(fn, format='png')
+        dot=G.draw(None, format='xdot')
 
-        pb=Pixbuf.new_from_file(fn)
+        #pb=Pixbuf.new_from_file(fn)
 
-        image.set_from_pixbuf(pb)
+        self.set_xdotcode(dot)
+
+        # image.set_from_pixbuf(pb)
+
+    def set_xdotcode(self, xdotcode, filename=None):
+        if self.ui.dot_widget.set_xdotcode(xdotcode):
+            self.dot_widget.zoom_to_fit()
 
     def on_project_open(self, widget, filename):
         if 1:
