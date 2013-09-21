@@ -10,3 +10,9 @@
 [submodule "submodules/xdot"]
 	path = submodules/xdot
 	url = git@github.com:eugeneai/xdot.py.git
+[submodule "submodules/matplotlib"]
+	path = submodules/matplotlib
+	url = git@github.com:eugeneai/matplotlib.git
+[submodule "submodules/prisnif"]
+	path = submodules/prisnif
+	url = git@bitbucket.org:eugeneai/prisnif.git
