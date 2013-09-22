@@ -2,6 +2,8 @@ from ez_setup import use_setuptools
 use_setuptools()
 from setuptools import setup, find_packages, Extension
 from distutils import log
+#import celerid.support as cs
+from celerid.support import setup,Extension
 
 log.set_verbosity(100)
 
@@ -26,9 +28,13 @@ setup(
         "xdot"
     ],
 
-	ext_modules=[Extension( "icc.dme.fd.DModel",
-		sources=["src/icc/dme/fd/C/DModel.c"],
-		)
+	ext_modules=[
+        Extension("icc.dme.fd.DModel",
+                  sources=["src/icc/dme/fd/C/DModel.c"],
+        ),
+        Extension("icc.prisnif.prisnif",
+                  sources=["src/icc/prisnif/src/prisnif.d"],
+        )
 	],
 
     scripts = ['src/icc/icc_dme_app.py'],
