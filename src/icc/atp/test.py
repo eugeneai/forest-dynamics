@@ -1,3 +1,3 @@
-import prisnif
+import atp
 
 prisnif.hello_func()
