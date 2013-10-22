@@ -31,7 +31,7 @@ setup(
     ],
 
 	ext_modules=[
-        Extension("icc.prisnif.atp",
+        Extension("icc.atp.atp",
                   sources=["src/icc/atp/src/atp.d"],
         )
 	],

@@ -10,12 +10,12 @@
 [submodule "submodules/matplotlib"]
 	path = submodules/matplotlib
 	url = git@github.com:eugeneai/matplotlib.git
-[submodule "submodules/prisnif"]
-	path = submodules/prisnif
-	url = git@bitbucket.org:eugeneai/prisnif.git
 [submodule "submodules/DME"]
 	path = submodules/DME
 	url = git@github.com:eugeneai/DME.git
 [submodule "submodules/dispersive"]
 	path = submodules/dispersive
 	url = git@github.com:eugeneai/dispersive.git
+[submodule "submodules/py-prisnif"]
+	path = submodules/py-prisnif
+	url = git@github.com:eugeneai/py-prisnif.git
