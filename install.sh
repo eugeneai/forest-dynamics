@@ -126,6 +126,12 @@ cd submodules/xdot
 $PYTHON setup.py install
 cd ../..
 
+pip install pyparsing
+
+cd submodules/matplotlib
+$PYTHON setup.py install
+cd ../..
+
 $PYTHON setup.py develop
 
 rm -rf tmp-install
