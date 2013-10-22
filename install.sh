@@ -58,10 +58,8 @@ cd jsonpickle
 python setup.py install
 cd ../DME
 python setup.py develop
-cd ../
-#LC_ALL=C hg clone ssh://hg@bitbucket.org/eugeneai/pyd
-cd pyd
-python setup.py install
+cd ../py-prisnif
+    ./install.sh
 cd ../..
 
 tmp=tmp-install
