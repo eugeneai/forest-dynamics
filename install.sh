@@ -59,6 +59,7 @@ python setup.py install
 cd ../DME
 python setup.py develop
 cd ../py-prisnif
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     ./install.sh
 cd ../..
 
