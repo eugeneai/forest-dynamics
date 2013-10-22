@@ -16,3 +16,6 @@
 [submodule "submodules/DME"]
 	path = submodules/DME
 	url = git@github.com:eugeneai/DME.git
+[submodule "submodules/dispersive"]
+	path = submodules/dispersive
+	url = git@github.com:eugeneai/dispersive.git

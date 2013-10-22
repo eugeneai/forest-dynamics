@@ -53,6 +53,17 @@ fi
 git submodule init
 git submodule update
 
+cd submodules
+cd jsonpickle
+python setup.py install
+cd ../DME
+python setup.py develop
+cd ../
+#LC_ALL=C hg clone ssh://hg@bitbucket.org/eugeneai/pyd
+cd pyd
+python setup.py install
+cd ../..
+
 tmp=tmp-install
 
 mkdir -p $tmp
@@ -106,8 +117,15 @@ cd ..
 $PYTHON -c "import icc.xray"
 rc=$?
 if [ $rc -ne 0 ]; then
-    pip install https://github.com/eugeneai/dispersive/archive/$ICC_DME_BRANCH.zip
+#    pip install https://github.com/eugeneai/dispersive/archive/$ICC_DME_BRANCH.zip
+    cd submodules/dispersive
+    $PYTHON setup.py develop
+    cd ../..
 fi
+
+cd submodules/xdot
+$PYTHON setup.py install
+cd ../..
 
 $PYTHON setup.py develop
 
