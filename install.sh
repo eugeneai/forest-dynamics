@@ -14,7 +14,7 @@ DEBUG=""
 
 if [ "x$DEBUG" == "x" ] ; then
     if [ "x$1" == "x" ] ; then
-        echo "The program ins installed into a directory."
+        echo "The program is installed into a directory."
         echo "Please supply the name of the directory as"
         echo "the first parameter of the install.sh script."
         exit 1
@@ -49,6 +49,9 @@ if [ ! -e $TARGET_DIR/bin/activate ]; then
 fi
 
 . $TARGET_DIR/bin/activate
+
+git submodule init
+git submodule update
 
 tmp=tmp-install
 
