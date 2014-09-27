@@ -1,0 +1,10 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+<adapter
+    factory=".components.DMEPlotView"
+    provides="icc.rake.views.interfaces.IProjectView"
+    for="icc.dme.models.interfaces.IProject
+         icc.rake.views.interfaces.IApplication"
+    />
+
+</configure>

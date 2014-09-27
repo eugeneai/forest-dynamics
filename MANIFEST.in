@@ -1,0 +1,5 @@
+recursive-include LIB *
+recursive-include SRC *
+recursive-include forest *
+include MANIFEST.in
+include setup.py
